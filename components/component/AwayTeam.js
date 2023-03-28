@@ -1,15 +1,15 @@
 import { Text, View, StyleSheet } from "react-native";
 import Colors from "../UI/Colors";
 
-function Faza1() {
+function AwayTeam() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Faza 1</Text>
+      <Text style={styles.text}>Away Team</Text>
     </View>
   );
 }
 
-export default Faza1;
+export default AwayTeam;
 
 const styles = StyleSheet.create({
   container: {

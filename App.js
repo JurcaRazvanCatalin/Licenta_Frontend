@@ -9,7 +9,9 @@ import StatisticsContainer from "./screens/StatisticsContainer.js";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "./components/UI/Colors";
 import { StyleSheet } from "react-native";
-import { View } from "react-native";
+import Matches from "./components/component/Matches";
+import MatchData from "./components/component/MatchData";
+import MatchStats from "./components/component/MatchStats";
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -28,7 +30,6 @@ function TabNavigator() {
           backgroundColor: Colors.grey_400,
           position: "absolute",
           bottom: 15,
-          elevation: 4,
           height: 60,
           borderRadius: 15,
           right: 20,
@@ -107,6 +108,10 @@ export default function App() {
             contentStyle: {
               backgroundColor: Colors.grey_400,
             },
+            headerStyle: {
+              backgroundColor: Colors.grey_500,
+            },
+            headerTintColor: Colors.white,
           }}
         >
           <Stack.Screen
@@ -116,6 +121,7 @@ export default function App() {
               headerShown: false,
             }}
           />
+          <Stack.Screen name="Match" component={MatchStats} />
         </Stack.Navigator>
       </NavigationContainer>
     </>
