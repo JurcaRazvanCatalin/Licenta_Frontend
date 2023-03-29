@@ -70,6 +70,8 @@ function Calendar() {
                   matchTime: match.matchTime,
                   awayTeamLogo: match.awayTeamLogo,
                   homeTeamLogo: match.homeTeamLogo,
+                  awayTeamStats: match.awayTeamStats,
+                  homeTeamStats: match.homeTeamsStats,
                 });
               }}
             >

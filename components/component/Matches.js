@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: Colors.grey_400,
     borderRadius: 10,
-    marginHorizontal: 10,
     marginVertical: 5,
   },
   teamContainer: {
@@ -47,13 +46,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   teamName: {
-    fontSize: 18,
+    fontSize: 10,
     fontWeight: "bold",
     marginBottom: 5,
     color: Colors.white,
   },
   score: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: "bold",
     color: Colors.white,
   },

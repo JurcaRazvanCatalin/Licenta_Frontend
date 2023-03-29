@@ -9,9 +9,8 @@ import StatisticsContainer from "./screens/StatisticsContainer.js";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "./components/UI/Colors";
 import { StyleSheet } from "react-native";
-import Matches from "./components/component/Matches";
-import MatchData from "./components/component/MatchData";
 import MatchStats from "./components/component/MatchStats";
+import Player from "./components/component/Player";
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -122,6 +121,7 @@ export default function App() {
             }}
           />
           <Stack.Screen name="Match" component={MatchStats} />
+          <Stack.Screen name="Player" component={Player} />
         </Stack.Navigator>
       </NavigationContainer>
     </>
