@@ -13,16 +13,18 @@ function Matches({
 }) {
   return (
     <View style={styles.matchContainer}>
-      <View style={styles.teamContainer}>
-        <Image source={{ uri: homeTeamLogo }} style={styles.imageStyle} />
-        <Text style={styles.teamName}>{homeTeam}</Text>
-      </View>
-      <Text style={styles.score}>{homeTeamScore}</Text>
-      <Text style={styles.scoreSeparator}>-</Text>
-      <Text style={styles.score}>{awayTeamScore}</Text>
-      <View style={styles.teamContainer}>
-        <Image source={{ uri: awayTeamLogo }} style={styles.imageStyle} />
-        <Text style={styles.teamName}>{awayTeam}</Text>
+      <View style={styles.teamsContainer}>
+        <View style={styles.teamContainer}>
+          <Image source={{ uri: homeTeamLogo }} style={styles.imageStyle} />
+          <Text style={styles.teamName}>{homeTeam}</Text>
+        </View>
+        <Text style={styles.score}>{homeTeamScore}</Text>
+        <Text style={styles.scoreSeparator}>-</Text>
+        <Text style={styles.score}>{awayTeamScore}</Text>
+        <View style={styles.teamContainer}>
+          <Image source={{ uri: awayTeamLogo }} style={styles.imageStyle} />
+          <Text style={styles.teamName}>{awayTeam}</Text>
+        </View>
       </View>
     </View>
   );
@@ -32,14 +34,17 @@ export default Matches;
 
 const styles = StyleSheet.create({
   matchContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 10,
     backgroundColor: Colors.grey_400,
     borderRadius: 10,
     marginVertical: 5,
+  },
+  teamsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    width: "100%",
   },
   teamContainer: {
     flexDirection: "column",

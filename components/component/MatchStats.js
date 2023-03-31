@@ -4,6 +4,8 @@ import HomeTeam from "./HomeTeam";
 import AwayTeam from "./AwayTeam";
 import { useLayoutEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
+import MatchPts from "./MatchPts";
+import { LinearGradient } from "expo-linear-gradient";
 
 function MatchStats({ route }) {
   const navigation = useNavigation();
@@ -13,10 +15,14 @@ function MatchStats({ route }) {
     homeTeam,
     awayTeamScore,
     homeTeamScore,
+    awayTeamColor,
+    homeTeamColor,
     awayTeamLogo,
     homeTeamLogo,
     awayTeamStats,
     homeTeamStats,
+    awayTeamPts,
+    homeTeamPts,
   } = route.params;
 
   useLayoutEffect(() => {
@@ -31,18 +37,29 @@ function MatchStats({ route }) {
 
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.container}>
-        <View style={styles.teamContainer}>
+      <LinearGradient
+        colors={[homeTeamColor, Colors.white, awayTeamColor]}
+        start={{ x: 0, y: 0.5 }}
+        style={styles.container}
+        end={{ x: 1, y: 0.5 }}
+        locations={[0, 0.5, 1]}
+      >
+        <View style={styles.linearGradient}>
           <Image source={{ uri: homeTeamLogo }} style={styles.imageStyle} />
-          <Text style={styles.score}>{homeTeamScore}</Text>
         </View>
-        <Text style={styles.score}>-</Text>
         <View>
           <Image source={{ uri: awayTeamLogo }} style={styles.imageStyle} />
-          <Text style={styles.score}>{awayTeamScore}</Text>
         </View>
-      </View>
+      </LinearGradient>
       <ScrollView>
+        <MatchPts
+          awayTeamPts={awayTeamPts}
+          homeTeamPts={homeTeamPts}
+          homeTeamLogo={homeTeamLogo}
+          awayTeamLogo={awayTeamLogo}
+          awayTeamScore={awayTeamScore}
+          homeTeamScore={homeTeamScore}
+        />
         <View style={styles.statsContainer}>
           <Image source={{ uri: homeTeamLogo }} style={styles.statsImage} />
           <Text style={styles.text}>{homeTeam}</Text>
@@ -65,6 +82,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.grey_500,
   },
+  linearGradient: {
+    flexDirection: "column",
+  },
   container: {
     backgroundColor: Colors.grey_200,
     flexDirection: "row",
@@ -72,9 +92,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: "30%",
     marginBottom: 20,
-  },
-  teamContainer: {
-    flexDirection: "column",
   },
   text: {
     color: Colors.white,

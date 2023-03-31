@@ -22,14 +22,9 @@ function Calendar() {
     setSelectedDate(date);
   };
 
-  const handleGetSelectedDate = () => {
-    const date = calendarRef.getSelectedDate();
-    return date;
-  };
   return (
     <View>
       <CalendarStrip
-        ref={(ref) => (calendarRef = ref)}
         selectedDate={selectedDate}
         onDateSelected={handleDateSelected}
         datesWhitelist={datesWhitelist}
@@ -72,6 +67,10 @@ function Calendar() {
                   homeTeamLogo: match.homeTeamLogo,
                   awayTeamStats: match.awayTeamStats,
                   homeTeamStats: match.homeTeamsStats,
+                  homeTeamPts: match.homeTeamPts,
+                  awayTeamPts: match.awayTeamPts,
+                  awayTeamColor: match.awayTeamColor,
+                  homeTeamColor: match.homeTeamColor,
                 });
               }}
             >
