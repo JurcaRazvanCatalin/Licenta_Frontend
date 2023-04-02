@@ -27,12 +27,7 @@ function TabNavigator() {
         tabBarInactiveTintColor: Colors.beige_100,
         tabBarStyle: {
           backgroundColor: Colors.grey_400,
-          position: "absolute",
-          bottom: 15,
           height: 60,
-          borderRadius: 15,
-          right: 20,
-          left: 20,
         },
         tabBarItemStyle: {
           marginBottom: 5,

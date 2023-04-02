@@ -30,9 +30,9 @@ function AwayTeam({ awayTeamStats }) {
           <Text style={[styles.cell, styles.headerCell]}>FLS</Text>
           <Text style={[styles.cell, styles.headerCell]}>TOV</Text>
         </View>
-        {awayTeamStats.map((data) => {
+        {awayTeamStats.map((data, index) => {
           return (
-            <View key={data.playerNumber} style={styles.tableRow}>
+            <View key={index} style={styles.tableRow}>
               <Pressable
                 android_ripple={{ color: Colors.grey_300 }}
                 onPress={() =>

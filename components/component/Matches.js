@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Image } from "react-native";
+import { Text, View, StyleSheet, Image, ScrollView } from "react-native";
 import moment from "moment";
 import { useState } from "react";
 import Colors from "../UI/Colors";

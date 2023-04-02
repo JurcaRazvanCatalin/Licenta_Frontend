@@ -23,34 +23,26 @@ function MatchPts({
         <Text style={[styles.cell, styles.headerCell]}>Q4</Text>
         <Text style={[styles.cell, styles.headerCell]}>T</Text>
       </View>
-      {homeTeamPts.map((data, index) => {
-        return (
-          <View key={index} style={styles.tableRow}>
-            <View style={[styles.nameContainer]}>
-              <Image source={{ uri: homeTeamLogo }} style={[styles.teamLogo]} />
-            </View>
-            <Text style={styles.cell}>{data.first_pts}</Text>
-            <Text style={styles.cell}>{data.second_pts}</Text>
-            <Text style={styles.cell}>{data.third_pts}</Text>
-            <Text style={styles.cell}>{data.fourth_pts}</Text>
-            <Text style={[styles.cell, styles.total]}>{homeTeamScore}</Text>
-          </View>
-        );
-      })}
-      {awayTeamPts.map((data, index) => {
-        return (
-          <View key={index} style={styles.tableRow}>
-            <View style={[styles.nameContainer, styles.cell]}>
-              <Image source={{ uri: awayTeamLogo }} style={[styles.teamLogo]} />
-            </View>
-            <Text style={styles.cell}>{data.first_pts_a}</Text>
-            <Text style={styles.cell}>{data.second_pts_a}</Text>
-            <Text style={styles.cell}>{data.third_pts_a}</Text>
-            <Text style={styles.cell}>{data.fourth_pts_a}</Text>
-            <Text style={[styles.cell, styles.total]}>{awayTeamScore}</Text>
-          </View>
-        );
-      })}
+      <View style={styles.tableRow}>
+        <View style={[styles.nameContainer]}>
+          <Image source={{ uri: homeTeamLogo }} style={[styles.teamLogo]} />
+        </View>
+        <Text style={styles.cell}>{homeTeamPts.first_pts}</Text>
+        <Text style={styles.cell}>{homeTeamPts.second_pts}</Text>
+        <Text style={styles.cell}>{homeTeamPts.third_pts}</Text>
+        <Text style={styles.cell}>{homeTeamPts.fourth_pts}</Text>
+        <Text style={[styles.cell, styles.total]}>{homeTeamScore}</Text>
+      </View>
+      <View style={styles.tableRow}>
+        <View style={[styles.nameContainer, styles.cell]}>
+          <Image source={{ uri: awayTeamLogo }} style={[styles.teamLogo]} />
+        </View>
+        <Text style={styles.cell}>{awayTeamPts.first_pts_a}</Text>
+        <Text style={styles.cell}>{awayTeamPts.second_pts_a}</Text>
+        <Text style={styles.cell}>{awayTeamPts.third_pts_a}</Text>
+        <Text style={styles.cell}>{awayTeamPts.fourth_pts_a}</Text>
+        <Text style={[styles.cell, styles.total]}>{awayTeamScore}</Text>
+      </View>
     </View>
   );
 }

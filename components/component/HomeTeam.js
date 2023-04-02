@@ -32,9 +32,9 @@ function HomeTeam({ homeTeamStats }) {
           <Text style={[styles.cell, styles.headerCell]}>FLS</Text>
           <Text style={[styles.cell, styles.headerCell]}>TOV</Text>
         </View>
-        {homeTeamStats.map((data) => {
+        {homeTeamStats.map((data, index) => {
           return (
-            <View key={data.playerNumber} style={styles.tableRow}>
+            <View key={index} style={styles.tableRow}>
               <Pressable
                 onPress={() =>
                   navigation.navigate("Player", {
