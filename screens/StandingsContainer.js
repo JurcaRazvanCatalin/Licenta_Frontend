@@ -3,6 +3,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import Faza1 from "../components/component/Faza1";
 import Faza2 from "../components/component/Faza2";
 import Colors from "../components/UI/Colors";
+import PlayOffs from "../components/component/PlayOffs";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -34,6 +35,13 @@ function StandingsContainer() {
         component={Faza2}
         options={{
           title: "Faza 2",
+        }}
+      />
+      <Tab.Screen
+        name="Playoffs"
+        component={PlayOffs}
+        options={{
+          title: "Playoffs",
         }}
       />
     </Tab.Navigator>

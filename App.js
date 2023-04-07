@@ -11,6 +11,7 @@ import Colors from "./components/UI/Colors";
 import { StyleSheet } from "react-native";
 import MatchStats from "./components/component/MatchStats";
 import Player from "./components/component/Player";
+import Team from "./components/component/Team";
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -117,6 +118,7 @@ export default function App() {
           />
           <Stack.Screen name="Match" component={MatchStats} />
           <Stack.Screen name="Player" component={Player} />
+          <Stack.Screen name="Team" component={Team} />
         </Stack.Navigator>
       </NavigationContainer>
     </>

@@ -8,6 +8,7 @@ function Matches({
   homeTeam,
   awayTeamLogo,
   homeTeamLogo,
+  matchTime,
   awayTeamScore,
   homeTeamScore,
 }) {
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   teamName: {
-    fontSize: 10,
+    fontSize: 8,
     fontWeight: "bold",
     marginBottom: 5,
     color: Colors.white,

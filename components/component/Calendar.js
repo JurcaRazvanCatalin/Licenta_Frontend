@@ -88,6 +88,7 @@ function Calendar() {
                 <Matches
                   homeTeam={match.homeTeam}
                   awayTeam={match.awayTeam}
+                  matchTime={match.matchTime}
                   homeTeamLogo={match.homeTeamLogo}
                   awayTeamLogo={match.awayTeamLogo}
                   homeTeamScore={match.homeTeamScore}
