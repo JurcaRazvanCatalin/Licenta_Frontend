@@ -43,6 +43,7 @@ function TeamsContainer() {
                 onPress={() => {
                   navigation.navigate("Team", {
                     smallTeamName: team.smallTeamName,
+                    teamName: team.teamName,
                   });
                 }}
                 key={team._id}

@@ -38,6 +38,7 @@ function AwayTeam({ awayTeamStats }) {
                 onPress={() =>
                   navigation.navigate("Player", {
                     playerName: data.playerName,
+                    playerNameSmall: data.playerNameSmall,
                   })
                 }
                 style={({ pressed }) => {

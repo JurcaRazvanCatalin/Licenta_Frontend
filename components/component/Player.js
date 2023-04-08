@@ -1,12 +1,22 @@
 import { StyleSheet } from "react-native";
-import { View, Text } from "react-native";
+import { View, Text, Image } from "react-native";
 import Colors from "../UI/Colors";
 import { useNavigation } from "@react-navigation/native";
-import { useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
+import axios from "axios";
 
 function Player({ route }) {
-  const { playerName } = route.params;
+  const [player, setPlayer] = useState([]);
+  const { playerName, playerNameSmall, teamColor } = route.params;
   const navigation = useNavigation();
+
+  useEffect(() => {
+    axios(
+      `https://players.herokuapp.com/api/v1/players/create-player?playerNameSmall=${playerNameSmall}`
+    ).then((response) => {
+      setPlayer(response.data.players);
+    });
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -19,8 +29,19 @@ function Player({ route }) {
   });
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>{playerName}</Text>
+    <View style={[styles.container, { backgroundColor: teamColor }]}>
+      {player &&
+        player.map((player, index) => {
+          return (
+            <View key={index}>
+              <Image
+                source={{ uri: player.playerImg }}
+                style={styles.playerImg}
+              />
+              <Text>{player.playerName}</Text>
+            </View>
+          );
+        })}
     </View>
   );
 }
@@ -35,5 +56,10 @@ const styles = StyleSheet.create({
   },
   text: {
     color: Colors.white,
+  },
+  playerImg: {
+    width: 100,
+    height: 100,
+    borderRadius: 60,
   },
 });

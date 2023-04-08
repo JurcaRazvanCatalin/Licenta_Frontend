@@ -39,6 +39,7 @@ function HomeTeam({ homeTeamStats }) {
                 onPress={() =>
                   navigation.navigate("Player", {
                     playerName: data.playerName,
+                    playerNameSmall: data.playerNameSmall,
                   })
                 }
                 android_ripple={{ color: Colors.grey_300 }}

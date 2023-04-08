@@ -1,16 +1,19 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import Colors from "../UI/Colors";
 import ImageSvg from "react-native-remote-svg";
 import TeamYearlyStats from "./TeamYearlyStats";
+import { useNavigation } from "@react-navigation/native";
+import { Pressable } from "react-native";
 
 function Team({ route }) {
-  const { smallTeamName } = route.params;
+  const { smallTeamName, teamName } = route.params;
   const [playerData, setPlayerData] = useState([]);
   const [teamData, setTeamData] = useState([]);
   const noAvailablePhoto =
     "https://upload.wikimedia.org/wikipedia/commons/f/fc/No_picture_available.png?fbclid=IwAR1VIrlTu94YPaj0nxwQQAau3ejIxVAb6A91lpgsZ3_vJQVFLO8xgFlowuc";
+  const navigation = useNavigation();
 
   useEffect(() => {
     axios(
@@ -24,6 +27,18 @@ function Team({ route }) {
       setTeamData(response.data.teams);
     });
   }, []);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: `${teamName}`,
+      headerTitleStyle: {
+        fontSize: 21,
+        color: Colors.white,
+      },
+    });
+  }, []);
+
+  const teamColor = teamData.map((team) => team.color_one);
 
   return (
     <View style={{ flex: 1 }}>
@@ -51,8 +66,12 @@ function Team({ route }) {
           <Text style={[styles.cell, styles.text, styles.nameContainer]}>
             Name
           </Text>
-          <Text style={[styles.text]}>#</Text>
-          <Text style={[styles.text]}>Country</Text>
+          <Text style={[styles.text, { fontWeight: "bold", fontSize: 11 }]}>
+            #
+          </Text>
+          <Text style={[styles.text, { fontWeight: "bold", fontSize: 11 }]}>
+            Country
+          </Text>
         </View>
         {playerData &&
           playerData.map((player) => {
@@ -69,12 +88,24 @@ function Team({ route }) {
                     style={styles.playerLogo}
                   />
                 )}
-                <View style={styles.nameContainer}>
-                  <Text style={styles.text}>{player.playerName}</Text>
-                  <Text style={[styles.text, styles.position]}>
-                    {player.position}
-                  </Text>
-                </View>
+                <Pressable
+                  onPress={() => {
+                    navigation.navigate("Player", {
+                      playerName: player.playerName,
+                      playerNameSmall: player.playerNameSmall,
+                      teamColor: teamColor,
+                    });
+                  }}
+                  android_ripple={{ color: Colors.grey_200 }}
+                  style={{ width: "62.5%" }}
+                >
+                  <View style={styles.nameContainer}>
+                    <Text style={styles.text}>{player.playerName}</Text>
+                    <Text style={[styles.text, styles.position]}>
+                      {player.position}
+                    </Text>
+                  </View>
+                </Pressable>
                 <Text style={[styles.text, styles.marginNrCountry]}>
                   #{player.number}
                 </Text>
