@@ -10,12 +10,11 @@ import Colors from "../UI/Colors";
 import { useEffect, useState } from "react";
 const API_URI = "https://standings.herokuapp.com/api/v1/teams/create-standings";
 import axios from "axios";
-import { useNavigation } from "@react-navigation/native";
+import TeamStanding from "./TeamStanding";
 
 function Faza1() {
   const [dataA, setDataA] = useState([]);
   const [dataB, setDataB] = useState([]);
-  const navigation = useNavigation();
 
   useEffect(() => {
     axios(`${API_URI}?phase=1&group=A`).then((response) => {
@@ -43,25 +42,17 @@ function Faza1() {
         {dataA &&
           dataA.map((team) => {
             return (
-              <View key={team._id} style={styles.teamContainer}>
-                <Text style={styles.headerText}>{team.ranking}.</Text>
-                <Image source={{ uri: team.teamLogo }} style={styles.imgSize} />
-                <Pressable
-                  style={styles.teamName}
-                  android_ripple={{ color: Colors.grey_300 }}
-                  onPress={() => {
-                    navigation.navigate("Team", {
-                      smallTeamName: team.smallTeamName,
-                    });
-                  }}
-                >
-                  <Text style={styles.text}>{team.teamName}</Text>
-                </Pressable>
-                <Text style={styles.headerText}>{team.matchesPlayed}</Text>
-                <Text style={styles.headerText}>{team.winnedMatches}</Text>
-                <Text style={styles.headerText}>{team.lostMatches}</Text>
-                <Text style={styles.headerText}>{team.pts}</Text>
-              </View>
+              <TeamStanding
+                key={team._id}
+                ranking={team.ranking}
+                teamLogo={team.teamLogo}
+                smallTeamName={team.smallTeamName}
+                teamName={team.teamName}
+                matchesPlayed={team.matchesPlayed}
+                winnedMatches={team.winnedMatches}
+                lostMatches={team.lostMatches}
+                pts={team.pts}
+              />
             );
           })}
       </View>
@@ -78,25 +69,17 @@ function Faza1() {
         {dataB &&
           dataB.map((team) => {
             return (
-              <View key={team._id} style={styles.teamContainer}>
-                <Text style={styles.headerText}>{team.ranking}.</Text>
-                <Image source={{ uri: team.teamLogo }} style={styles.imgSize} />
-                <Pressable
-                  style={styles.teamName}
-                  android_ripple={{ color: Colors.grey_300 }}
-                  onPress={() => {
-                    navigation.navigate("Team", {
-                      smallTeamName: team.smallTeamName,
-                    });
-                  }}
-                >
-                  <Text style={styles.text}>{team.teamName}</Text>
-                </Pressable>
-                <Text style={styles.headerText}>{team.matchesPlayed}</Text>
-                <Text style={styles.headerText}>{team.winnedMatches}</Text>
-                <Text style={styles.headerText}>{team.lostMatches}</Text>
-                <Text style={styles.headerText}>{team.pts}</Text>
-              </View>
+              <TeamStanding
+                key={team._id}
+                ranking={team.ranking}
+                teamLogo={team.teamLogo}
+                smallTeamName={team.smallTeamName}
+                teamName={team.teamName}
+                matchesPlayed={team.matchesPlayed}
+                winnedMatches={team.winnedMatches}
+                lostMatches={team.lostMatches}
+                pts={team.pts}
+              />
             );
           })}
       </View>

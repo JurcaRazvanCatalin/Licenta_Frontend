@@ -15,14 +15,14 @@ function PlayOffs() {
   const [data_playoffs, setData_Playoffs] = useState([]);
 
   useEffect(() => {
-    axios(`${API_URI}?phase=Playoffs&group=sferturi`).then((response) => {
+    axios(`${API_URI}?phase=Playout&group=turul1`).then((response) => {
       setData_Playoffs(response.data.teams);
     });
   });
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.groupText}>Sferturi de Finala</Text>
+      <Text style={styles.groupText}>Turul 1</Text>
       <View style={styles.table}>
         <View style={styles.teamContainer}>
           <Text style={styles.headerText}>#</Text>

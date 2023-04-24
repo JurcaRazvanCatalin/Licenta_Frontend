@@ -30,43 +30,44 @@ function AwayTeam({ awayTeamStats }) {
           <Text style={[styles.cell, styles.headerCell]}>FLS</Text>
           <Text style={[styles.cell, styles.headerCell]}>TOV</Text>
         </View>
-        {awayTeamStats.map((data, index) => {
-          return (
-            <View key={index} style={styles.tableRow}>
-              <Pressable
-                android_ripple={{ color: Colors.grey_300 }}
-                onPress={() =>
-                  navigation.navigate("Player", {
-                    playerName: data.playerName,
-                    playerNameSmall: data.playerNameSmall,
-                  })
-                }
-                style={({ pressed }) => {
-                  pressed ? styles.buttonPressed : null;
-                }}
-              >
-                <Text style={[styles.nameContainer]}>{data.playerName}</Text>
-              </Pressable>
-              <Text style={styles.cell}>#{data.playerNumber}</Text>
-              <Text style={styles.cell}>{data.minutesPlayed}</Text>
-              <Text style={styles.cell}>{data.pts}</Text>
-              <Text style={styles.cell}>{data.reb}</Text>
-              <Text style={styles.cell}>{data.ass}</Text>
-              <Text style={styles.cell}>{data.blocks}</Text>
-              <Text style={styles.cell}>{data.two_fgm}</Text>
-              <Text style={styles.cell}>{data.two_fga}</Text>
-              <Text style={styles.cell}>{data.two_fgp}%</Text>
-              <Text style={styles.cell}>{data.three_fgm}</Text>
-              <Text style={styles.cell}>{data.three_fga}</Text>
-              <Text style={styles.cell}>{data.three_fgp}%</Text>
-              <Text style={styles.cell}>{data.ftm}</Text>
-              <Text style={styles.cell}>{data.fta}</Text>
-              <Text style={styles.cell}>{data.ftp}%</Text>
-              <Text style={styles.cell}>{data.fouls}</Text>
-              <Text style={styles.cell}>{data.tov}</Text>
-            </View>
-          );
-        })}
+        {awayTeamStats &&
+          awayTeamStats.map((data, index) => {
+            return (
+              <View key={index} style={styles.tableRow}>
+                <Pressable
+                  android_ripple={{ color: Colors.grey_300 }}
+                  onPress={() =>
+                    navigation.navigate("Player", {
+                      playerName: data.playerName,
+                      playerNameSmall: data.playerNameSmall,
+                    })
+                  }
+                  style={({ pressed }) => {
+                    pressed ? styles.buttonPressed : null;
+                  }}
+                >
+                  <Text style={[styles.nameContainer]}>{data.playerName}</Text>
+                </Pressable>
+                <Text style={styles.cell}>#{data.playerNumber}</Text>
+                <Text style={styles.cell}>{data.minutesPlayed}</Text>
+                <Text style={styles.cell}>{data.pts}</Text>
+                <Text style={styles.cell}>{data.reb}</Text>
+                <Text style={styles.cell}>{data.ass}</Text>
+                <Text style={styles.cell}>{data.blocks}</Text>
+                <Text style={styles.cell}>{data.two_fgm}</Text>
+                <Text style={styles.cell}>{data.two_fga}</Text>
+                <Text style={styles.cell}>{data.two_fgp}%</Text>
+                <Text style={styles.cell}>{data.three_fgm}</Text>
+                <Text style={styles.cell}>{data.three_fga}</Text>
+                <Text style={styles.cell}>{data.three_fgp}%</Text>
+                <Text style={styles.cell}>{data.ftm}</Text>
+                <Text style={styles.cell}>{data.fta}</Text>
+                <Text style={styles.cell}>{data.ftp}%</Text>
+                <Text style={styles.cell}>{data.fouls}</Text>
+                <Text style={styles.cell}>{data.tov}</Text>
+              </View>
+            );
+          })}
       </View>
     </ScrollView>
   );

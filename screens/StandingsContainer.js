@@ -4,6 +4,7 @@ import Faza1 from "../components/component/Faza1";
 import Faza2 from "../components/component/Faza2";
 import Colors from "../components/UI/Colors";
 import PlayOffs from "../components/component/PlayOffs";
+import PlayOut from "../components/component/PlayOut";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -42,6 +43,13 @@ function StandingsContainer() {
         component={PlayOffs}
         options={{
           title: "Playoffs",
+        }}
+      />
+      <Tab.Screen
+        name="PlayOut"
+        component={PlayOut}
+        options={{
+          title: "PlayOut",
         }}
       />
     </Tab.Navigator>
