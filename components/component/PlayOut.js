@@ -2,21 +2,22 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   ScrollView,
-  Pressable,
+  ActivityIndicator,
 } from "react-native";
-const API_URI = "https://standings.herokuapp.com/api/v1/teams/create-standings";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import TeamStanding from "./TeamStanding";
+const API_URI = "https://standings.herokuapp.com/api/v1/teams/create-standings";
 
 function PlayOffs() {
   const [data_playoffs, setData_Playoffs] = useState([]);
+  const [isLoadingTurul1, setIsLodingTurul1] = useState(true);
 
   useEffect(() => {
     axios(`${API_URI}?phase=Playout&group=turul1`).then((response) => {
       setData_Playoffs(response.data.teams);
+      setIsLodingTurul1(false);
     });
   });
 
@@ -32,7 +33,12 @@ function PlayOffs() {
           <Text style={styles.headerText}>L</Text>
           <Text style={styles.headerText}>P</Text>
         </View>
-        {data_playoffs &&
+        {isLoadingTurul1 ? (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size={"large"} color={Colors.white} />
+          </View>
+        ) : (
+          data_playoffs &&
           data_playoffs.map((team) => {
             return (
               <TeamStanding
@@ -47,7 +53,8 @@ function PlayOffs() {
                 pts={team.pts}
               />
             );
-          })}
+          })
+        )}
       </View>
     </ScrollView>
   );
@@ -116,5 +123,10 @@ const styles = StyleSheet.create({
   },
   text: {
     color: Colors.white,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

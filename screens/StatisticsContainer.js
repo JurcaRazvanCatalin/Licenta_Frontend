@@ -21,7 +21,7 @@ function StatisticsContainer() {
   const options1 = [
     { key: "1", value: "Faza 1" },
     { key: "2", value: "Faza 2" },
-    { key: "playoff", value: "Playoffs" },
+    { key: "playoff", value: "Playoff" },
     { key: "playout", value: "Playout" },
   ];
   const options2 = [
@@ -30,36 +30,12 @@ function StatisticsContainer() {
     { key: "recuperari", value: "Recuperari" },
     { key: "eff", value: "Eff" },
   ];
-  // const defaultValue1 = { key: "1", value: "Faza 1" };
-
-  // const fetchData = async (value1, value2) => {
-  //   const response = axios(
-  //     `https://statistics2023.herokuapp.com/api/v1/statistics/create-stat?phase=${value1}&stats=${value2}`
-  //   );
-  //   return response;
-  // };
-
-  // const handleSelection = async (value, dropdownNumber) => {
-  //   if (dropdownNumber === 1) {
-  //     setSelectedValue1(value);
-  //     const selectedData = await fetchData(selectedValue1, "puncte");
-  //     setValue(selectedData.data.statistics);
-  //   } else {
-  //     setSelectedValue2(value);
-  //   }
-
-  //   if (selectedValue1 && selectedValue2) {
-  //     const selectedData = await fetchData(selectedValue1, selectedValue2);
-  //     setValue(selectedData.data.statistics);
-  //   }
-  // };
 
   useEffect(() => {
     if (selectedValue1 && !selectedValue2) {
       axios(
         `https://statistics2023.herokuapp.com/api/v1/statistics/create-stat?phase=${selectedValue1}&stats=puncte`
       ).then((response) => {
-        setLoader(true);
         setData(response.data.statistics);
         setUpdatedTitle(response.data.statistics[0].phase);
         setUpdatedTitleStat("PUNCTE");
@@ -69,7 +45,6 @@ function StatisticsContainer() {
       axios(
         `https://statistics2023.herokuapp.com/api/v1/statistics/create-stat?phase=${selectedValue1}&stats=${selectedValue2}`
       ).then((response) => {
-        setLoader(true);
         setData(response.data.statistics);
         setUpdatedTitle(response.data.statistics[0].phase);
         setUpdatedTitleStat(response.data.statistics[0].stats);
@@ -85,7 +60,10 @@ function StatisticsContainer() {
           <SelectList
             data={options1}
             placeholder="Select phase ..."
-            setSelected={(val) => setSelectedValue1(val)}
+            setSelected={(val) => {
+              setLoader(true);
+              setSelectedValue1(val);
+            }}
             selectedOption={selectedValue1}
             search={false}
             inputStyles={{ color: Colors.grey_100, fontWeight: 800 }}
@@ -101,7 +79,10 @@ function StatisticsContainer() {
           <SelectList
             data={options2}
             placeholder="Select category ... "
-            setSelected={(val) => setSelectedValue2(val)}
+            setSelected={(val) => {
+              setLoader(true);
+              setSelectedValue2(val);
+            }}
             selectedOption={selectedValue2}
             search={false}
             inputStyles={{ color: Colors.grey_100, fontWeight: 800 }}
@@ -113,14 +94,36 @@ function StatisticsContainer() {
             }}
           />
         </View>
-        <ScrollView>
-          <View style={{ flexDirection: "row" }}>
-            <Text style={[styles.title]}>Faza {updatedTitle},</Text>
+        <View style={styles.row}>
+          <View style={styles.titleContainer}>
             <Text style={[styles.title]}>
-              stats for {updatedTitleStat.toUpperCase()}
+              Faza :{" "}
+              <Text style={styles.importantTitle}>
+                {updatedTitle.toUpperCase()}
+              </Text>
+            </Text>
+            <Text style={[styles.title]}>
+              Stats for :{" "}
+              <Text style={styles.importantTitle}>
+                {updatedTitleStat.toUpperCase()}
+              </Text>
             </Text>
           </View>
-          {!loader ? (
+        </View>
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerCellRanking}>#</Text>
+          <Text style={styles.headerCellLarge}>Player Name</Text>
+          <Text style={styles.headerCellLarge}>Team Name</Text>
+          <Text style={styles.headerCell}>M</Text>
+          <Text style={styles.headerCell}>Stats</Text>
+        </View>
+        <ScrollView>
+          {loader ? (
+            <View style={styles.loaderContainer}>
+              <ActivityIndicator size={"large"} color={Colors.yellow} />
+            </View>
+          ) : (
+            data &&
             data.map((stat) => {
               return (
                 <PlayerStat
@@ -130,11 +133,11 @@ function StatisticsContainer() {
                   teamName={stat.teamName}
                   matchesPlayed={stat.matchesPlayed}
                   mediumStats={stat.mediumStats}
+                  playerNameSmall={stat.playerNameSmall}
+                  smallTeamName={stat.smallTeamName}
                 />
               );
             })
-          ) : (
-            <ActivityIndicator />
           )}
         </ScrollView>
       </View>
@@ -168,7 +171,54 @@ const styles = StyleSheet.create({
   },
   title: {
     color: Colors.white,
+    fontWeight: 500,
+    fontSize: 17,
+  },
+  importantTitle: {
     fontWeight: 900,
     fontSize: 20,
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  titleContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.grey_200,
+    marginVertical: 10,
+  },
+  headerCell: {
+    flex: 2,
+    textAlign: "center",
+    color: Colors.white,
+    fontWeight: "bold",
+    fontSize: 10,
+  },
+  headerCellRanking: {
+    flex: 1,
+    textAlign: "center",
+    color: Colors.yellow,
+    fontWeight: "bold",
+    fontSize: 10,
+  },
+  headerCellLarge: {
+    flex: 4,
+    textAlign: "center",
+    color: Colors.white,
+    fontWeight: "bold",
+    fontSize: 10,
   },
 });

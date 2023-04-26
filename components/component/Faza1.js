@@ -5,6 +5,7 @@ import {
   Image,
   ScrollView,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 import Colors from "../UI/Colors";
 import { useEffect, useState } from "react";
@@ -15,15 +16,19 @@ import TeamStanding from "./TeamStanding";
 function Faza1() {
   const [dataA, setDataA] = useState([]);
   const [dataB, setDataB] = useState([]);
+  const [isLoadingA, setIsLoadingA] = useState(true);
+  const [isLoadingB, setIsLoadingB] = useState(true);
 
   useEffect(() => {
     axios(`${API_URI}?phase=1&group=A`).then((response) => {
       // console.log(response.data.teams);
       setDataA(response.data.teams);
+      setIsLoadingA(false);
     });
     axios(`${API_URI}?phase=1&group=B`).then((response) => {
       // console.log(response.data.teams);
       setDataB(response.data.teams);
+      setIsLoadingB(false);
     });
   }, []);
 
@@ -39,7 +44,12 @@ function Faza1() {
           <Text style={styles.headerText}>L</Text>
           <Text style={styles.headerText}>P</Text>
         </View>
-        {dataA &&
+        {isLoadingA ? (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size={"large"} color={Colors.white} />
+          </View>
+        ) : (
+          dataA &&
           dataA.map((team) => {
             return (
               <TeamStanding
@@ -54,7 +64,8 @@ function Faza1() {
                 pts={team.pts}
               />
             );
-          })}
+          })
+        )}
       </View>
       <Text style={styles.groupText}>Grupa B</Text>
       <View style={styles.table}>
@@ -66,7 +77,12 @@ function Faza1() {
           <Text style={styles.headerText}>L</Text>
           <Text style={styles.headerText}>P</Text>
         </View>
-        {dataB &&
+        {isLoadingB ? (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size={"large"} color={Colors.white} />
+          </View>
+        ) : (
+          dataB &&
           dataB.map((team) => {
             return (
               <TeamStanding
@@ -81,7 +97,8 @@ function Faza1() {
                 pts={team.pts}
               />
             );
-          })}
+          })
+        )}
       </View>
     </ScrollView>
   );
@@ -142,12 +159,12 @@ const styles = StyleSheet.create({
     borderRightColor: Colors.grey_300,
     marginHorizontal: 10,
   },
-  tableText: {
-    flex: 1,
-    textAlign: "center",
-    color: Colors.white,
-  },
   text: {
     color: Colors.white,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

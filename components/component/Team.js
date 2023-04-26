@@ -1,6 +1,13 @@
 import axios from "axios";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import Colors from "../UI/Colors";
 import ImageSvg from "react-native-remote-svg";
 import TeamYearlyStats from "./TeamYearlyStats";
@@ -10,6 +17,7 @@ import { Pressable } from "react-native";
 function Team({ route }) {
   const { smallTeamName, teamName } = route.params;
   const [playerData, setPlayerData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [teamData, setTeamData] = useState([]);
   const noAvailablePhoto =
     "https://upload.wikimedia.org/wikipedia/commons/f/fc/No_picture_available.png?fbclid=IwAR1VIrlTu94YPaj0nxwQQAau3ejIxVAb6A91lpgsZ3_vJQVFLO8xgFlowuc";
@@ -25,6 +33,7 @@ function Team({ route }) {
       `https://teams.herokuapp.com/api/v1/teams/create-team?smallTeamName=${smallTeamName}`
     ).then((response) => {
       setTeamData(response.data.teams);
+      setIsLoading(false);
     });
   }, []);
 
@@ -42,94 +51,109 @@ function Team({ route }) {
 
   return (
     <View style={{ flex: 1 }}>
-      {teamData &&
-        teamData.map((team) => {
-          return (
-            <View
-              key={team._id}
-              style={[styles.container, { backgroundColor: team.color_one }]}
-            >
-              <Image
-                source={{ uri: team.teamLogo }}
-                style={[styles.logo, styles.headerComponents]}
-              />
-              <Text
-                style={[styles.text, styles.headerComponents, styles.teamName]}
-              >
-                {team.teamName}
+      {isLoading ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size={"large"} color={Colors.white} />
+        </View>
+      ) : (
+        <View>
+          {teamData &&
+            teamData.map((team) => {
+              return (
+                <View
+                  key={team._id}
+                  style={[
+                    styles.container,
+                    { backgroundColor: team.color_one },
+                  ]}
+                >
+                  <Image
+                    source={{ uri: team.teamLogo }}
+                    style={[styles.logo, styles.headerComponents]}
+                  />
+                  <Text
+                    style={[
+                      styles.text,
+                      styles.headerComponents,
+                      styles.teamName,
+                    ]}
+                  >
+                    {team.teamName}
+                  </Text>
+                </View>
+              );
+            })}
+          <ScrollView>
+            <View style={[styles.playerContainer]}>
+              <Text style={[styles.cell, styles.text, styles.nameContainer]}>
+                Name
+              </Text>
+              <Text style={[styles.text, { fontWeight: "bold", fontSize: 11 }]}>
+                #
+              </Text>
+              <Text style={[styles.text, { fontWeight: "bold", fontSize: 11 }]}>
+                Country
               </Text>
             </View>
-          );
-        })}
-      <ScrollView>
-        <View style={[styles.playerContainer]}>
-          <Text style={[styles.cell, styles.text, styles.nameContainer]}>
-            Name
-          </Text>
-          <Text style={[styles.text, { fontWeight: "bold", fontSize: 11 }]}>
-            #
-          </Text>
-          <Text style={[styles.text, { fontWeight: "bold", fontSize: 11 }]}>
-            Country
-          </Text>
-        </View>
-        {playerData &&
-          playerData.map((player) => {
-            return (
-              <View key={player._id} style={styles.playerContainer}>
-                {player.playerImg === "/images/site/no-player-image.svg" ? (
-                  <Image
-                    source={{ uri: noAvailablePhoto }}
-                    style={styles.playerLogo}
-                  />
-                ) : (
-                  <Image
-                    source={{ uri: player.playerImg }}
-                    style={styles.playerLogo}
-                  />
-                )}
-                <Pressable
-                  onPress={() => {
-                    navigation.navigate("Player", {
-                      playerName: player.playerName,
-                      playerNameSmall: player.playerNameSmall,
-                      teamColor: teamColor,
-                    });
-                  }}
-                  android_ripple={{ color: Colors.grey_200 }}
-                  style={{ width: "62.5%" }}
-                >
-                  <View style={styles.nameContainer}>
-                    <Text style={styles.text}>{player.playerName}</Text>
-                    <Text style={[styles.text, styles.position]}>
-                      {player.position}
+            {playerData &&
+              playerData.map((player) => {
+                return (
+                  <View key={player._id} style={styles.playerContainer}>
+                    {player.playerImg === "/images/site/no-player-image.svg" ? (
+                      <Image
+                        source={{ uri: noAvailablePhoto }}
+                        style={styles.playerLogo}
+                      />
+                    ) : (
+                      <Image
+                        source={{ uri: player.playerImg }}
+                        style={styles.playerLogo}
+                      />
+                    )}
+                    <Pressable
+                      onPress={() => {
+                        navigation.navigate("Player", {
+                          playerName: player.playerName,
+                          playerNameSmall: player.playerNameSmall,
+                          teamColor: teamColor,
+                        });
+                      }}
+                      android_ripple={{ color: Colors.grey_200 }}
+                      style={{ width: "62.5%" }}
+                    >
+                      <View style={styles.nameContainer}>
+                        <Text style={styles.text}>{player.playerName}</Text>
+                        <Text style={[styles.text, styles.position]}>
+                          {player.position}
+                        </Text>
+                      </View>
+                    </Pressable>
+                    <Text style={[styles.text, styles.marginNrCountry]}>
+                      #{player.number}
                     </Text>
+                    <View style={styles.countryContainer}>
+                      <ImageSvg
+                        style={[styles.country]}
+                        source={{ uri: player.playerCountry }}
+                      />
+                    </View>
                   </View>
-                </Pressable>
-                <Text style={[styles.text, styles.marginNrCountry]}>
-                  #{player.number}
-                </Text>
-                <View style={styles.countryContainer}>
-                  <ImageSvg
-                    style={[styles.country]}
-                    source={{ uri: player.playerCountry }}
+                );
+              })}
+            {teamData &&
+              teamData.map((team) => {
+                return (
+                  <TeamYearlyStats
+                    key={team._id}
+                    stats={team.yearlyStats}
+                    teamName={team.teamName}
+                    teamLogo={team.teamLogo}
                   />
-                </View>
-              </View>
-            );
-          })}
-        {teamData &&
-          teamData.map((team) => {
-            return (
-              <TeamYearlyStats
-                key={team._id}
-                stats={team.yearlyStats}
-                teamName={team.teamName}
-                teamLogo={team.teamLogo}
-              />
-            );
-          })}
-      </ScrollView>
+                );
+              })}
+          </ScrollView>
+        </View>
+      )}
     </View>
   );
 }
@@ -197,5 +221,10 @@ const styles = StyleSheet.create({
   marginNrCountry: {
     marginHorizontal: 30,
     textAlign: "center",
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

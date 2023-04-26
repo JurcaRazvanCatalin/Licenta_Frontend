@@ -7,9 +7,11 @@ import axios from "axios";
 import PlayerHeader from "./PlayerHeader";
 import { ScrollView } from "react-native";
 import PlayerHistory from "./PlayerHistory";
+import { ActivityIndicator } from "react-native";
 
 function Player({ route }) {
   const [player, setPlayer] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { playerName, playerNameSmall, teamColor } = route.params;
   const navigation = useNavigation();
   const noAvailablePhoto =
@@ -21,6 +23,7 @@ function Player({ route }) {
     ).then((response) => {
       setPlayer(response.data.players);
       // console.log(response.data.players);
+      setIsLoading(false);
     });
   }, []);
 
@@ -36,7 +39,12 @@ function Player({ route }) {
 
   return (
     <View style={styles.container}>
-      {player &&
+      {isLoading ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size={"large"} color={Colors.white} />
+        </View>
+      ) : (
+        player &&
         player.map((player) => {
           return (
             <PlayerHeader
@@ -58,7 +66,8 @@ function Player({ route }) {
               noAvailablePhoto={noAvailablePhoto}
             />
           );
-        })}
+        })
+      )}
       {player &&
         player.map((player, index) => {
           return (
@@ -79,5 +88,10 @@ export default Player;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

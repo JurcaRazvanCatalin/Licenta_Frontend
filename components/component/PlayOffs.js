@@ -2,23 +2,36 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   ScrollView,
-  Pressable,
+  ActivityIndicator,
 } from "react-native";
-const API_URI = "https://standings.herokuapp.com/api/v1/teams/create-standings";
 import axios from "axios";
 import { useEffect, useState } from "react";
+
 import TeamStanding from "./TeamStanding";
 
 function PlayOffs() {
   const [data_playoffs, setData_Playoffs] = useState([]);
+  const [data_playoffsSemi, setData_PlayoffsSemi] = useState([]);
+  const [isLoadingSferturi, setIsLoadingSferturi] = useState(true);
+  const [isLoadingSemifinale, setIsLoadingSemifinale] = useState(true);
 
   useEffect(() => {
-    axios(`${API_URI}?phase=Playoffs&group=sferturi`).then((response) => {
+    axios(
+      `https://standings.herokuapp.com/api/v1/teams/create-standings?phase=Playoffs&group=sferturi`
+    ).then((response) => {
+      // console.log(response.data.teams);
       setData_Playoffs(response.data.teams);
+      setIsLoadingSferturi(false);
     });
-  });
+    axios(
+      `https://standings.herokuapp.com/api/v1/teams/create-standings?phase=Playoffs&group=semifinale`
+    ).then((response) => {
+      // console.log(response.data.teams);
+      setData_PlayoffsSemi(response.data.teams);
+      setIsLoadingSemifinale(false);
+    });
+  }, []);
 
   return (
     <ScrollView style={styles.container}>
@@ -32,7 +45,12 @@ function PlayOffs() {
           <Text style={styles.headerText}>L</Text>
           <Text style={styles.headerText}>P</Text>
         </View>
-        {data_playoffs &&
+        {isLoadingSferturi ? (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size={"large"} color={Colors.white} />
+          </View>
+        ) : (
+          data_playoffs &&
           data_playoffs.map((team) => {
             return (
               <TeamStanding
@@ -47,7 +65,41 @@ function PlayOffs() {
                 pts={team.pts}
               />
             );
-          })}
+          })
+        )}
+      </View>
+      <Text style={styles.groupText}>Semifinale</Text>
+      <View style={styles.table}>
+        <View style={styles.teamContainer}>
+          <Text style={styles.headerText}>#</Text>
+          <Text style={[styles.headerText, styles.nameContainer]}>Name</Text>
+          <Text style={styles.headerText}>M</Text>
+          <Text style={styles.headerText}>W</Text>
+          <Text style={styles.headerText}>L</Text>
+          <Text style={styles.headerText}>P</Text>
+        </View>
+        {isLoadingSemifinale ? (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size={"large"} color={Colors.white} />
+          </View>
+        ) : (
+          data_playoffsSemi &&
+          data_playoffsSemi.map((team) => {
+            return (
+              <TeamStanding
+                key={team._id}
+                ranking={team.ranking}
+                teamLogo={team.teamLogo}
+                smallTeamName={team.smallTeamName}
+                teamName={team.teamName}
+                matchesPlayed={team.matchesPlayed}
+                winnedMatches={team.winnedMatches}
+                lostMatches={team.lostMatches}
+                pts={team.pts}
+              />
+            );
+          })
+        )}
       </View>
     </ScrollView>
   );
@@ -116,5 +168,10 @@ const styles = StyleSheet.create({
   },
   text: {
     color: Colors.white,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

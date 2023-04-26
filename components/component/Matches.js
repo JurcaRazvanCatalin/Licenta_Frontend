@@ -1,6 +1,4 @@
-import { Text, View, StyleSheet, Image, ScrollView } from "react-native";
-import moment from "moment";
-import { useState } from "react";
+import { Text, View, StyleSheet, Image } from "react-native";
 import Colors from "../UI/Colors";
 
 function Matches({
@@ -12,21 +10,47 @@ function Matches({
   awayTeamScore,
   homeTeamScore,
 }) {
+  const Compare = () => {
+    if (awayTeamScore !== "-") {
+      return (
+        <View style={styles.matchContainer}>
+          <View style={styles.teamsContainer}>
+            <View style={styles.teamContainer}>
+              <Image source={{ uri: homeTeamLogo }} style={styles.imageStyle} />
+              <Text style={styles.teamName}>{homeTeam}</Text>
+            </View>
+            <Text style={styles.score}>{homeTeamScore}</Text>
+            <Text style={styles.scoreSeparator}>-</Text>
+            <Text style={styles.score}>{awayTeamScore}</Text>
+            <View style={styles.teamContainer}>
+              <Image source={{ uri: awayTeamLogo }} style={styles.imageStyle} />
+              <Text style={styles.teamName}>{awayTeam}</Text>
+            </View>
+          </View>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.matchContainer}>
+          <View style={styles.teamsContainer}>
+            <View style={styles.teamContainer}>
+              <Image source={{ uri: homeTeamLogo }} style={styles.imageStyle} />
+              <Text style={styles.teamName}>{homeTeam}</Text>
+            </View>
+            <Text style={styles.matchTime}>{matchTime}</Text>
+            <View style={styles.teamContainer}>
+              <Image source={{ uri: awayTeamLogo }} style={styles.imageStyle} />
+              <Text style={styles.teamName}>{awayTeam}</Text>
+            </View>
+          </View>
+        </View>
+      );
+    }
+  };
+
   return (
-    <View style={styles.matchContainer}>
-      <View style={styles.teamsContainer}>
-        <View style={styles.teamContainer}>
-          <Image source={{ uri: homeTeamLogo }} style={styles.imageStyle} />
-          <Text style={styles.teamName}>{homeTeam}</Text>
-        </View>
-        <Text style={styles.score}>{homeTeamScore}</Text>
-        <Text style={styles.scoreSeparator}>-</Text>
-        <Text style={styles.score}>{awayTeamScore}</Text>
-        <View style={styles.teamContainer}>
-          <Image source={{ uri: awayTeamLogo }} style={styles.imageStyle} />
-          <Text style={styles.teamName}>{awayTeam}</Text>
-        </View>
-      </View>
+    <View>
+      <Compare />
     </View>
   );
 }
@@ -71,5 +95,10 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 60,
     marginVertical: 5,
+  },
+  matchTime: {
+    fontSize: 25,
+    fontWeight: "bold",
+    color: Colors.white,
   },
 });

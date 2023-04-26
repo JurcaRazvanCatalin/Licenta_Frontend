@@ -6,9 +6,9 @@ import {
   Pressable,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import Colors from "../components/UI/Colors";
-import data from "../data";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
@@ -18,6 +18,7 @@ function TeamsContainer() {
   const navigation = useNavigation();
   const [isPressed, setIsPressed] = useState(false);
   const [teamsData, setTeamsData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handlePress = () => {
     setIsPressed(!isPressed);
@@ -27,6 +28,7 @@ function TeamsContainer() {
     axios("https://teams.herokuapp.com/api/v1/teams/create-team").then(
       (response) => {
         setTeamsData(response.data.teams);
+        setIsLoading(false);
       }
     );
   }, []);
@@ -34,7 +36,12 @@ function TeamsContainer() {
   return (
     <ScrollView>
       <View style={styles.container}>
-        {teamsData &&
+        {isLoading ? (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size={"large"} color={Colors.white} />
+          </View>
+        ) : (
+          teamsData &&
           teamsData.map((team) => {
             return (
               <Pressable
@@ -64,7 +71,8 @@ function TeamsContainer() {
                 </View>
               </Pressable>
             );
-          })}
+          })
+        )}
       </View>
     </ScrollView>
   );
@@ -105,5 +113,10 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

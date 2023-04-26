@@ -1,10 +1,6 @@
-import {
-  Text,
-  View,
-  StyleSheet,
-  ScrollView,
-  ActivityIndicator,
-} from "react-native";
+import { Text, View, StyleSheet, Pressable } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import Colors from "../UI/Colors";
 
 function PlayerStat({
   ranking,
@@ -12,14 +8,42 @@ function PlayerStat({
   teamName,
   matchesPlayed,
   mediumStats,
+  playerNameSmall,
+  smallTeamName,
 }) {
+  const navigation = useNavigation();
+
   return (
-    <View style={styles.playerStat}>
-      <Text style={[styles.text, styles.stat]}>{ranking}</Text>
-      <Text style={[styles.text, styles.stat]}>{playerName}</Text>
-      <Text style={[styles.text, styles.stat]}>{teamName}</Text>
-      <Text style={[styles.text, styles.stat]}>{matchesPlayed}</Text>
-      <Text style={[styles.text, styles.stat]}>{mediumStats}</Text>
+    <View style={styles.headerContainer}>
+      <Text style={{ flex: 1.3, textAlign: "center", color: Colors.yellow }}>
+        {ranking}.
+      </Text>
+      <Pressable
+        style={styles.headerCell}
+        android_ripple={{ color: Colors.grey_200 }}
+        onPress={() => {
+          navigation.navigate("Player", {
+            playerName: playerName,
+            playerNameSmall: playerNameSmall,
+          });
+        }}
+      >
+        <Text style={styles.text}>{playerName}</Text>
+      </Pressable>
+      <Pressable
+        style={styles.headerCell}
+        android_ripple={{ color: Colors.grey_200 }}
+        onPress={() => {
+          navigation.navigate("Team", {
+            smallTeamName: smallTeamName,
+            teamName: teamName,
+          });
+        }}
+      >
+        <Text style={[styles.text, { textAlign: "center" }]}>{teamName}</Text>
+      </Pressable>
+      <Text style={styles.smallCell}>{matchesPlayed}</Text>
+      <Text style={styles.smallCell}>{mediumStats}</Text>
     </View>
   );
 }
@@ -27,16 +51,25 @@ function PlayerStat({
 export default PlayerStat;
 
 const styles = StyleSheet.create({
-  playerStat: {
-    flexDirection: "row",
-  },
   text: {
-    color: "white",
-  },
-
-  stat: {
-    marginHorizontal: 10,
     fontSize: 12,
-    marginVertical: 10,
+    textAlign: "left",
+    color: Colors.white,
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingTop: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.grey_200,
+    paddingBottom: 10,
+  },
+  headerCell: {
+    flex: 4,
+  },
+  smallCell: { flex: 2, textAlign: "center", color: Colors.white },
+  border: {
+    borderWidth: 2,
+    borderColor: Colors.grey_200,
   },
 });

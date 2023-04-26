@@ -5,6 +5,7 @@ import {
   Image,
   ScrollView,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 import Colors from "../UI/Colors";
 const API_URI = "https://standings.herokuapp.com/api/v1/teams/create-standings";
@@ -15,15 +16,19 @@ import TeamStanding from "./TeamStanding";
 function Faza2() {
   const [data1_10, setData1_10] = useState([]);
   const [data11_19, setData11_19] = useState([]);
+  const [isLoading1_10, setIsLoading1_10] = useState(true);
+  const [isLoading11_19, setIsLoading11_19] = useState(true);
 
   useEffect(() => {
     axios(`${API_URI}?phase=2&group=1-10`).then((response) => {
       // console.log(response.data.teams);
       setData1_10(response.data.teams);
+      setIsLoading1_10(false);
     });
     axios(`${API_URI}?phase=2&group=11-19`).then((response) => {
       // console.log(response.data.teams);
       setData11_19(response.data.teams);
+      setIsLoading11_19(false);
     });
   }, []);
 
@@ -39,7 +44,12 @@ function Faza2() {
           <Text style={styles.headerText}>L</Text>
           <Text style={styles.headerText}>P</Text>
         </View>
-        {data1_10 &&
+        {isLoading1_10 ? (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size={"large"} color={Colors.white} />
+          </View>
+        ) : (
+          data1_10 &&
           data1_10.map((team) => {
             return (
               <TeamStanding
@@ -54,7 +64,8 @@ function Faza2() {
                 pts={team.pts}
               />
             );
-          })}
+          })
+        )}
       </View>
       <Text style={styles.groupText}>Grupa 11-19</Text>
       <View style={styles.table}>
@@ -66,7 +77,12 @@ function Faza2() {
           <Text style={styles.headerText}>L</Text>
           <Text style={styles.headerText}>P</Text>
         </View>
-        {data11_19 &&
+        {isLoading11_19 ? (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size={"large"} color={Colors.white} />
+          </View>
+        ) : (
+          data11_19 &&
           data11_19.map((team) => {
             return (
               <TeamStanding
@@ -81,7 +97,8 @@ function Faza2() {
                 pts={team.pts}
               />
             );
-          })}
+          })
+        )}
       </View>
     </ScrollView>
   );
@@ -150,5 +167,10 @@ const styles = StyleSheet.create({
   },
   text: {
     color: Colors.white,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

@@ -1,7 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
 import Calendar from "../components/component/Calendar";
-import { useState } from "react";
-import data from "../data";
 
 function MatchesContainer() {
   return (
