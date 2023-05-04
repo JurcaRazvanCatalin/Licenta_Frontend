@@ -13,39 +13,68 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
+import { deleteFavorite, storeFavorites } from "../http";
 
 function TeamsContainer() {
   const navigation = useNavigation();
-  const [isPressed, setIsPressed] = useState(false);
   const [teamsData, setTeamsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const handlePress = () => {
-    setIsPressed(!isPressed);
+  const handlePress = (index) => {
+    const teams = [...teamsData];
+    teams[index].isPressed = !teams[index].isPressed;
+    setTeamsData(teams);
+
+    const team = teams[index];
+
+    if (team.isPressed) {
+      axios
+        .post(
+          "https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesTeams.json",
+          team
+        )
+        .then((response) => {
+          const firebaseId = response.data.name;
+          const updatedTeam = { ...team, firebaseId };
+          teams[index] = updatedTeam;
+          setTeamsData(teams);
+        });
+    } else {
+      const firebaseId = team.firebaseId;
+      deleteFavorite(firebaseId);
+    }
   };
 
   useEffect(() => {
     axios("https://teams.herokuapp.com/api/v1/teams/create-team").then(
       (response) => {
-        setTeamsData(response.data.teams);
+        const teams = response.data.teams.map((team) => ({
+          ...team,
+          isPressed: false,
+        }));
+        setTeamsData(teams);
         setIsLoading(false);
       }
     );
   }, []);
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        {isLoading ? (
-          <View style={styles.loaderContainer}>
-            <ActivityIndicator size={"large"} color={Colors.white} />
-          </View>
-        ) : (
-          teamsData &&
-          teamsData.map((team) => {
+    <View style={styles.container}>
+      {isLoading ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size={"large"} color={Colors.white} />
+        </View>
+      ) : (
+        <ScrollView>
+          {teamsData.map((team, index) => {
             return (
               <Pressable
-                style={styles.teamContainer}
+                style={[
+                  styles.teamContainer,
+                  ({ pressed }) => {
+                    pressed ? styles.buttonPressed : null;
+                  },
+                ]}
                 android_ripple={{ color: Colors.grey_200 }}
                 onPress={() => {
                   navigation.navigate("Team", {
@@ -61,20 +90,23 @@ function TeamsContainer() {
                     style={styles.logoContainer}
                   />
                   <Text style={styles.text}>{team.teamName}</Text>
-                  <TouchableOpacity style={[styles.star]} onPress={handlePress}>
-                    {isPressed ? (
-                      <Ionicons name="star" size={24} color={Colors.yellow} />
-                    ) : (
-                      <Ionicons name="star" size={24} color={Colors.grey_100} />
-                    )}
+                  <TouchableOpacity
+                    style={[styles.star]}
+                    onPress={() => handlePress(index)}
+                  >
+                    <Ionicons
+                      name="star"
+                      size={24}
+                      color={team.isPressed ? Colors.yellow : Colors.grey_100}
+                    />
                   </TouchableOpacity>
                 </View>
               </Pressable>
             );
-          })
-        )}
-      </View>
-    </ScrollView>
+          })}
+        </ScrollView>
+      )}
+    </View>
   );
 }
 
@@ -84,7 +116,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.grey_500,
-    alignItems: "center",
     padding: 20,
   },
   teamContainer: {
@@ -118,5 +149,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  buttonPressed: {
+    opacity: 0.5,
   },
 });

@@ -56,7 +56,7 @@ function Team({ route }) {
           <ActivityIndicator size={"large"} color={Colors.white} />
         </View>
       ) : (
-        <View>
+        <>
           {teamData &&
             teamData.map((team) => {
               return (
@@ -152,7 +152,7 @@ function Team({ route }) {
                 );
               })}
           </ScrollView>
-        </View>
+        </>
       )}
     </View>
   );

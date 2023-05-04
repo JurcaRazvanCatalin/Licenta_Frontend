@@ -19,7 +19,12 @@ function PlayerStat({
         {ranking}.
       </Text>
       <Pressable
-        style={styles.headerCell}
+        style={[
+          styles.headerCell,
+          ({ pressed }) => {
+            pressed ? styles.buttonPressed : null;
+          },
+        ]}
         android_ripple={{ color: Colors.grey_200 }}
         onPress={() => {
           navigation.navigate("Player", {
@@ -31,7 +36,12 @@ function PlayerStat({
         <Text style={styles.text}>{playerName}</Text>
       </Pressable>
       <Pressable
-        style={styles.headerCell}
+        style={[
+          styles.headerCell,
+          ({ pressed }) => {
+            pressed ? styles.buttonPressed : null;
+          },
+        ]}
         android_ripple={{ color: Colors.grey_200 }}
         onPress={() => {
           navigation.navigate("Team", {
@@ -71,5 +81,8 @@ const styles = StyleSheet.create({
   border: {
     borderWidth: 2,
     borderColor: Colors.grey_200,
+  },
+  buttonPressed: {
+    opacity: 0.5,
   },
 });

@@ -11,25 +11,31 @@ import { useEffect, useState } from "react";
 import TeamStanding from "./TeamStanding";
 
 function PlayOffs() {
-  const [data_playoffs, setData_Playoffs] = useState([]);
+  const [data_playoffsSferturi, setData_PlayoffsSferturi] = useState([]);
   const [data_playoffsSemi, setData_PlayoffsSemi] = useState([]);
+  const [data_playoffs5_8, setData_Playoffs5_8] = useState([]);
   const [isLoadingSferturi, setIsLoadingSferturi] = useState(true);
   const [isLoadingSemifinale, setIsLoadingSemifinale] = useState(true);
+  const [isLoading5_8, setIsLoading5_8] = useState(true);
 
   useEffect(() => {
     axios(
       `https://standings.herokuapp.com/api/v1/teams/create-standings?phase=Playoffs&group=sferturi`
     ).then((response) => {
-      // console.log(response.data.teams);
-      setData_Playoffs(response.data.teams);
+      setData_PlayoffsSferturi(response.data.teams);
       setIsLoadingSferturi(false);
     });
     axios(
       `https://standings.herokuapp.com/api/v1/teams/create-standings?phase=Playoffs&group=semifinale`
     ).then((response) => {
-      // console.log(response.data.teams);
       setData_PlayoffsSemi(response.data.teams);
       setIsLoadingSemifinale(false);
+    });
+    axios(
+      `https://standings.herokuapp.com/api/v1/teams/create-standings?phase=Playoffs&group=5-8`
+    ).then((response) => {
+      setData_Playoffs5_8(response.data.teams);
+      setIsLoading5_8(false);
     });
   }, []);
 
@@ -50,8 +56,8 @@ function PlayOffs() {
             <ActivityIndicator size={"large"} color={Colors.white} />
           </View>
         ) : (
-          data_playoffs &&
-          data_playoffs.map((team) => {
+          data_playoffsSferturi &&
+          data_playoffsSferturi.map((team) => {
             return (
               <TeamStanding
                 key={team._id}
@@ -85,6 +91,39 @@ function PlayOffs() {
         ) : (
           data_playoffsSemi &&
           data_playoffsSemi.map((team) => {
+            return (
+              <TeamStanding
+                key={team._id}
+                ranking={team.ranking}
+                teamLogo={team.teamLogo}
+                smallTeamName={team.smallTeamName}
+                teamName={team.teamName}
+                matchesPlayed={team.matchesPlayed}
+                winnedMatches={team.winnedMatches}
+                lostMatches={team.lostMatches}
+                pts={team.pts}
+              />
+            );
+          })
+        )}
+      </View>
+      <Text style={styles.groupText}>Locurile 5-8</Text>
+      <View style={styles.table}>
+        <View style={styles.teamContainer}>
+          <Text style={styles.headerText}>#</Text>
+          <Text style={[styles.headerText, styles.nameContainer]}>Name</Text>
+          <Text style={styles.headerText}>M</Text>
+          <Text style={styles.headerText}>W</Text>
+          <Text style={styles.headerText}>L</Text>
+          <Text style={styles.headerText}>P</Text>
+        </View>
+        {isLoading5_8 ? (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size={"large"} color={Colors.white} />
+          </View>
+        ) : (
+          data_playoffs5_8 &&
+          data_playoffs5_8.map((team) => {
             return (
               <TeamStanding
                 key={team._id}

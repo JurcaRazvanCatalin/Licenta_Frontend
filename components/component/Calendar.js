@@ -69,9 +69,17 @@ function Calendar() {
           iconContainer={{ flex: 0.1 }}
           scrollable={true}
         />
-        <View style={styles.noMatchToday}>
-          <Text style={styles.noMatchText}>No match today</Text>
-        </View>
+        {isLoading ? (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size={"large"} color={Colors.white} />
+          </View>
+        ) : (
+          <>
+            <View style={styles.noMatchToday}>
+              <Text style={styles.noMatchText}>No matches today</Text>
+            </View>
+          </>
+        )}
       </View>
     );
   }
@@ -133,6 +141,10 @@ function Calendar() {
                       homeTeamColor: match.homeTeamColor,
                     });
                   }}
+                  style={({ pressed }) => {
+                    pressed ? styles.buttonPressed : null;
+                  }}
+                  android_ripple={{ color: Colors.grey_200 }}
                 >
                   <Matches
                     homeTeam={match.homeTeam}
@@ -182,5 +194,8 @@ const styles = StyleSheet.create({
   noMatchText: {
     fontSize: 20,
     color: Colors.white,
+  },
+  buttonPressed: {
+    opacity: 0.5,
   },
 });

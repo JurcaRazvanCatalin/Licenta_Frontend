@@ -12,6 +12,9 @@ import { StyleSheet } from "react-native";
 import MatchStats from "./components/component/MatchStats";
 import Player from "./components/component/Player";
 import Team from "./components/component/Team";
+import LoginSignup from "./components/component/LoginSignup";
+import SignUp from "./components/component/SignUp";
+import AccountScreen from "./screens/AccountScreen";
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -89,6 +92,21 @@ function TabNavigator() {
           },
         }}
       />
+      <Tabs.Screen
+        name="Account"
+        component={AccountScreen}
+        options={{
+          tabBarIcon: ({ size, color, focused }) => {
+            return (
+              <Ionicons
+                name={focused ? "person" : "person-outline"}
+                size={size}
+                color={color}
+              />
+            );
+          },
+        }}
+      />
     </Tabs.Navigator>
   );
 }
@@ -110,6 +128,11 @@ export default function App() {
           }}
         >
           <Stack.Screen
+            name="SignIn"
+            component={LoginSignup}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="TabBottom"
             component={TabNavigator}
             options={{
@@ -119,14 +142,13 @@ export default function App() {
           <Stack.Screen name="Match" component={MatchStats} />
           <Stack.Screen name="Player" component={Player} />
           <Stack.Screen name="Team" component={Team} />
+          <Stack.Screen
+            name="SignUp"
+            component={SignUp}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.grey_300,
-  },
-});

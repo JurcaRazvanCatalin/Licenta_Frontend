@@ -51,6 +51,7 @@ function Player({ route }) {
               key={player._id}
               playerImg={player.playerImg}
               playerName={player.playerName}
+              playerNameSmall={player.playerNameSmall}
               teamName={player.teamName}
               teamLogo={player.teamLogo}
               playerCountry={player.playerCountry}

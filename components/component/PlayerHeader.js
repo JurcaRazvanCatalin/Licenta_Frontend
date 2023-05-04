@@ -1,10 +1,15 @@
-import { StyleSheet, View, Image, Text } from "react-native";
+import { StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
 import Colors from "../UI/Colors";
 import ImageSvg from "react-native-remote-svg";
+import { useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import axios from "axios";
+import { deleteFavoritePlayer } from "../../http";
 
 function PlayerHeader({
   playerImg,
   playerName,
+  playerNameSmall,
   teamName,
   teamLogo,
   playerCountry,
@@ -19,6 +24,36 @@ function PlayerHeader({
   eff,
   noAvailablePhoto,
 }) {
+  const [isPressed, setIsPressed] = useState(false);
+  const [playerDatas, setPlayerDatas] = useState([]);
+
+  const playerData = {
+    playerImg: playerImg,
+    playerName: playerName,
+    playerNameSmall: playerNameSmall,
+    teamName: teamName,
+    teamLogo: teamLogo,
+  };
+
+  const handlePressed = () => {
+    setIsPressed(!isPressed);
+    if (!isPressed) {
+      axios
+        .post(
+          "https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers.json",
+          playerData
+        )
+        .then((response) => {
+          const firebaseId = response.data.name;
+          const updatedPlayer = { ...playerData, firebaseId };
+          setPlayerDatas(updatedPlayer);
+        });
+    } else {
+      const firebaseId = playerDatas.firebaseId;
+      deleteFavoritePlayer(firebaseId);
+    }
+  };
+
   return (
     <>
       <View style={styles.headerContainer}>
@@ -43,6 +78,13 @@ function PlayerHeader({
             </View>
             <View style={{ flexDirection: "row" }}>
               <Text style={[styles.text, styles.name]}>{playerName}</Text>
+              <TouchableOpacity style={[styles.star]} onPress={handlePressed}>
+                {isPressed ? (
+                  <Ionicons name="star" size={24} color={Colors.yellow} />
+                ) : (
+                  <Ionicons name="star" size={24} color={Colors.grey_100} />
+                )}
+              </TouchableOpacity>
             </View>
           </View>
         </View>
