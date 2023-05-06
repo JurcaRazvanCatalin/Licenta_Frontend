@@ -1,12 +1,14 @@
 import { StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
 import Colors from "../UI/Colors";
 import ImageSvg from "react-native-remote-svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import { deleteFavoritePlayer } from "../../http";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function PlayerHeader({
+  id,
   playerImg,
   playerName,
   playerNameSmall,
@@ -22,12 +24,14 @@ function PlayerHeader({
   reb_per_game,
   ass_per_game,
   eff,
+  isPressed,
   noAvailablePhoto,
 }) {
-  const [isPressed, setIsPressed] = useState(false);
   const [playerDatas, setPlayerDatas] = useState([]);
+  const [firebaseId, setFirebaseId] = useState([]);
 
   const playerData = {
+    id: id,
     playerImg: playerImg,
     playerName: playerName,
     playerNameSmall: playerNameSmall,
@@ -35,23 +39,86 @@ function PlayerHeader({
     teamLogo: teamLogo,
   };
 
-  const handlePressed = () => {
-    setIsPressed(!isPressed);
-    if (!isPressed) {
-      axios
-        .post(
+  useEffect(() => {
+    const getPlayerData = async () => {
+      try {
+        const storedFavoriteIds = AsyncStorage.getItem("firebaseId");
+        setFirebaseId(storedFavoriteIds);
+        const response = await axios.get(
+          `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers.json?orderBy="playerNameSmall"&equalTo="${playerNameSmall}"&limitToFirst=1`
+        );
+        const playerData = response.data
+          ? Object.values(response.data)[0]
+          : null;
+        setPlayerDatas(playerData);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getPlayerData();
+  }, [playerNameSmall]);
+
+  const handlePressed = async () => {
+    const updatedIsPressed = !isPressed;
+    console.log(updatedIsPressed);
+
+    if (updatedIsPressed) {
+      if (playerDatas) {
+        console.log(`Player already exists in Firebase`);
+        return;
+      }
+      try {
+        const response = await axios.post(
           "https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers.json",
           playerData
-        )
-        .then((response) => {
-          const firebaseId = response.data.name;
-          const updatedPlayer = { ...playerData, firebaseId };
-          setPlayerDatas(updatedPlayer);
-        });
+        );
+        const newFirebaseId = response.data.name;
+        const updatedPlayer = { ...playerData, firebaseId: newFirebaseId };
+        setPlayerDatas(updatedPlayer);
+        setFirebaseId([...firebaseId, newFirebaseId]); // Update the firebaseId state
+        await AsyncStorage.setItem(
+          "firebaseId",
+          JSON.stringify([...firebaseId, newFirebaseId])
+        );
+      } catch (error) {
+        console.error(error);
+      }
     } else {
-      const firebaseId = playerDatas.firebaseId;
-      deleteFavoritePlayer(firebaseId);
+      try {
+        const storedFirebaseId = await AsyncStorage.getItem("firebaseId");
+        const updatedFirebaseIds = JSON.parse(storedFirebaseId) || [];
+
+        console.log(storedFirebaseId);
+        if (!updatedFirebaseIds.includes(playerDatas?.firebaseId)) {
+          console.log(`No favorite Id available`);
+        }
+
+        const firebaseIdIndex = updatedFirebaseIds.indexOf(
+          playerDatas?.firebaseId
+        );
+
+        if (firebaseIdIndex > -1) {
+          await axios.delete(
+            `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers/${playerDatas?.firebaseId}.json`
+          );
+
+          updatedFirebaseIds.splice(firebaseIdIndex, 1);
+          setPlayerDatas(null);
+          setFirebaseId(updatedFirebaseIds);
+          await AsyncStorage.setItem(
+            "firebaseId",
+            JSON.stringify(updatedFirebaseIds)
+          );
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
+
+    axios.patch(
+      `https://players.herokuapp.com/api/v1/players/create-player/${playerNameSmall}`,
+      { isPressed: updatedIsPressed }
+    );
   };
 
   return (
@@ -78,7 +145,7 @@ function PlayerHeader({
             </View>
             <View style={{ flexDirection: "row" }}>
               <Text style={[styles.text, styles.name]}>{playerName}</Text>
-              <TouchableOpacity style={[styles.star]} onPress={handlePressed}>
+              <TouchableOpacity onPress={handlePressed}>
                 {isPressed ? (
                   <Ionicons name="star" size={24} color={Colors.yellow} />
                 ) : (

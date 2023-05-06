@@ -50,7 +50,6 @@ function TeamsContainer() {
       (response) => {
         const teams = response.data.teams.map((team) => ({
           ...team,
-          isPressed: false,
         }));
         setTeamsData(teams);
         setIsLoading(false);
@@ -92,7 +91,9 @@ function TeamsContainer() {
                   <Text style={styles.text}>{team.teamName}</Text>
                   <TouchableOpacity
                     style={[styles.star]}
-                    onPress={() => handlePress(index)}
+                    onPress={() => {
+                      handlePress(index);
+                    }}
                   >
                     <Ionicons
                       name="star"

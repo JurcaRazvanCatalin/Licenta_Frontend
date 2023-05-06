@@ -25,7 +25,7 @@ function Player({ route }) {
       // console.log(response.data.players);
       setIsLoading(false);
     });
-  }, []);
+  }, [player]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -49,6 +49,7 @@ function Player({ route }) {
           return (
             <PlayerHeader
               key={player._id}
+              id={player._id}
               playerImg={player.playerImg}
               playerName={player.playerName}
               playerNameSmall={player.playerNameSmall}
@@ -64,6 +65,7 @@ function Player({ route }) {
               reb_per_game={player.reb_per_game}
               ass_per_game={player.ass_per_game}
               eff={player.eff}
+              isPressed={player.isPressed}
               noAvailablePhoto={noAvailablePhoto}
             />
           );

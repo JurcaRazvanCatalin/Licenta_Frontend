@@ -8,6 +8,8 @@ import {
 } from "react-native";
 import axios from "axios";
 import Colors from "../components/UI/Colors";
+import FavoritePlayers from "../components/component/FavoritePlayers";
+import FavoriteTeams from "../components/component/FavoriteTeams";
 
 function AccountScreen() {
   const [favoritesPlayers, setFavoritesPlayers] = useState([]);
@@ -59,38 +61,48 @@ function AccountScreen() {
   return (
     <View style={styles.container}>
       <View>
-        <Text>Favorite players</Text>
-        {isLoading ? (
-          <View style={styles.loaderContainer}>
-            <ActivityIndicator size={"large"} color={Colors.yellow} />
-          </View>
-        ) : (
-          favoritesPlayers &&
-          favoritesPlayers.map((player) => {
-            return (
-              <View key={player.id}>
-                <Text>{player.playerName}</Text>
-              </View>
-            );
-          })
-        )}
+        <Text style={styles.title}>Favorite players</Text>
+        <ScrollView horizontal={true}>
+          {isLoading ? (
+            <View style={styles.loaderContainer}>
+              <ActivityIndicator size={"large"} color={Colors.yellow} />
+            </View>
+          ) : (
+            favoritesPlayers &&
+            favoritesPlayers.map((player) => {
+              return (
+                <FavoritePlayers
+                  key={player.id}
+                  playerImg={player.playerImg}
+                  playerName={player.playerName}
+                  playerNameSmall={player.playerNameSmall}
+                />
+              );
+            })
+          )}
+        </ScrollView>
       </View>
       <View>
-        <Text>Favorite Teams</Text>
-        {isLoading1 ? (
-          <View style={styles.loaderContainer}>
-            <ActivityIndicator size={"large"} color={Colors.yellow} />
-          </View>
-        ) : (
-          favoritesTeams &&
-          favoritesTeams.map((team) => {
-            return (
-              <View key={team.id}>
-                <Text>{team.teamName}</Text>
-              </View>
-            );
-          })
-        )}
+        <Text style={styles.title}>Favorite Teams</Text>
+        <ScrollView>
+          {isLoading1 ? (
+            <View style={styles.loaderContainer}>
+              <ActivityIndicator size={"large"} color={Colors.yellow} />
+            </View>
+          ) : (
+            favoritesTeams &&
+            favoritesTeams.map((team) => {
+              return (
+                <FavoriteTeams
+                  key={team.id}
+                  teamLogo={team.teamLogo}
+                  teamName={team.teamName}
+                  smallTeamName={team.smallTeamName}
+                />
+              );
+            })
+          )}
+        </ScrollView>
       </View>
     </View>
   );
@@ -107,5 +119,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  title: {
+    fontSize: 25,
+    fontWeight: 700,
+    padding: 20,
+    color: Colors.white,
   },
 });
