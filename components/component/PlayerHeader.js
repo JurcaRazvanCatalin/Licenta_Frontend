@@ -4,7 +4,6 @@ import ImageSvg from "react-native-remote-svg";
 import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
-import { deleteFavoritePlayer } from "../../http";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function PlayerHeader({
@@ -42,8 +41,6 @@ function PlayerHeader({
   useEffect(() => {
     const getPlayerData = async () => {
       try {
-        const storedFavoriteIds = AsyncStorage.getItem("firebaseId");
-        setFirebaseId(storedFavoriteIds);
         const response = await axios.get(
           `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers.json?orderBy="playerNameSmall"&equalTo="${playerNameSmall}"&limitToFirst=1`
         );
@@ -56,7 +53,7 @@ function PlayerHeader({
       }
     };
     getPlayerData();
-  }, [playerNameSmall]);
+  }, [playerDatas]);
 
   const handlePressed = async () => {
     const updatedIsPressed = !isPressed;
@@ -75,41 +72,32 @@ function PlayerHeader({
         const newFirebaseId = response.data.name;
         const updatedPlayer = { ...playerData, firebaseId: newFirebaseId };
         setPlayerDatas(updatedPlayer);
-        setFirebaseId([...firebaseId, newFirebaseId]); // Update the firebaseId state
+        const updatedFirebaseId = [...firebaseId, newFirebaseId];
+        setFirebaseId(updatedFirebaseId); // Update the firebaseId state
         await AsyncStorage.setItem(
           "firebaseId",
-          JSON.stringify([...firebaseId, newFirebaseId])
+          JSON.stringify(updatedFirebaseId)
         );
       } catch (error) {
         console.error(error);
       }
     } else {
       try {
-        const storedFirebaseId = await AsyncStorage.getItem("firebaseId");
-        const updatedFirebaseIds = JSON.parse(storedFirebaseId) || [];
-
-        console.log(storedFirebaseId);
-        if (!updatedFirebaseIds.includes(playerDatas?.firebaseId)) {
-          console.log(`No favorite Id available`);
-        }
-
-        const firebaseIdIndex = updatedFirebaseIds.indexOf(
-          playerDatas?.firebaseId
+        const response = await axios.get(
+          `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers.json?orderBy="playerNameSmall"&equalTo="${playerNameSmall}"&limitToFirst=1`
         );
 
-        if (firebaseIdIndex > -1) {
-          await axios.delete(
-            `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers/${playerDatas?.firebaseId}.json`
-          );
+        const playerToDelete = Object.keys(response.data)[0];
 
-          updatedFirebaseIds.splice(firebaseIdIndex, 1);
-          setPlayerDatas(null);
-          setFirebaseId(updatedFirebaseIds);
-          await AsyncStorage.setItem(
-            "firebaseId",
-            JSON.stringify(updatedFirebaseIds)
+        if (playerToDelete) {
+          await axios.delete(
+            `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers/${playerToDelete}.json`
           );
+        } else {
+          console.log(`Player not found in Firebase`);
         }
+
+        setPlayerDatas(null);
       } catch (error) {
         console.error(error);
       }

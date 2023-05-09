@@ -5,11 +5,13 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import axios from "axios";
 import Colors from "../components/UI/Colors";
 import FavoritePlayers from "../components/component/FavoritePlayers";
 import FavoriteTeams from "../components/component/FavoriteTeams";
+import { useNavigation } from "@react-navigation/native";
 
 function AccountScreen() {
   const [favoritesPlayers, setFavoritesPlayers] = useState([]);
@@ -58,8 +60,10 @@ function AccountScreen() {
     });
   }, [favoritesTeams]);
 
+  const navigation = useNavigation();
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View>
         <Text style={styles.title}>Favorite players</Text>
         <ScrollView horizontal={true}>
@@ -102,7 +106,17 @@ function AccountScreen() {
           })
         )}
       </View>
-    </View>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("SignIn");
+        }}
+        style={styles.button}
+      >
+        <Text style={{ color: Colors.white, textAlign: "center" }}>
+          Sign Out
+        </Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 }
 
@@ -123,5 +137,12 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     padding: 20,
     color: Colors.white,
+  },
+  button: {
+    backgroundColor: "#D22B2B",
+    padding: 20,
+    borderRadius: 10,
+    marginTop: 30,
+    marginBottom: 20,
   },
 });

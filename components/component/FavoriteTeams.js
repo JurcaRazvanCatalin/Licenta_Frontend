@@ -55,56 +55,55 @@ function FavoriteTeams({ teamLogo, teamName, smallTeamName }) {
           </Pressable>
         </View>
       </View>
-      <ScrollView contentContainerStyle={{ paddingBottom: 550 }}>
-        {isLoading ? (
-          <View style={styles.loaderContainer}>
-            <ActivityIndicator size={"large"} color={Colors.white} />
-          </View>
-        ) : (
-          matches &&
-          matches.map((match) => {
-            return (
-              <Pressable
-                key={match._id}
-                onPress={() => {
-                  navigation.navigate("Match", {
-                    id: match.id,
-                    awayTeam: match.awayTeam,
-                    homeTeam: match.homeTeam,
-                    awayTeamScore: match.awayTeamScore,
-                    homeTeamScore: match.homeTeamScore,
-                    referee: match.referee,
-                    arena: match.arena,
-                    matchTime: match.matchTime,
-                    awayTeamLogo: match.awayTeamLogo,
-                    homeTeamLogo: match.homeTeamLogo,
-                    awayTeamStats: match.awayTeamStats,
-                    homeTeamStats: match.homeTeamStats,
-                    homeTeamPts: match.homeTeamPts,
-                    awayTeamPts: match.awayTeamPts,
-                    awayTeamColor: match.awayTeamColor,
-                    homeTeamColor: match.homeTeamColor,
-                  });
-                }}
-                style={({ pressed }) => {
-                  pressed ? styles.buttonPressed : null;
-                }}
-                android_ripple={{ color: Colors.grey_200 }}
-              >
-                <Matches
-                  homeTeam={match.homeTeam}
-                  awayTeam={match.awayTeam}
-                  matchTime={match.matchTime}
-                  homeTeamLogo={match.homeTeamLogo}
-                  awayTeamLogo={match.awayTeamLogo}
-                  homeTeamScore={match.homeTeamScore}
-                  awayTeamScore={match.awayTeamScore}
-                />
-              </Pressable>
-            );
-          })
-        )}
-      </ScrollView>
+
+      {isLoading ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size={"large"} color={Colors.white} />
+        </View>
+      ) : (
+        matches &&
+        matches.map((match) => {
+          return (
+            <Pressable
+              key={match._id}
+              onPress={() => {
+                navigation.navigate("Match", {
+                  id: match.id,
+                  awayTeam: match.awayTeam,
+                  homeTeam: match.homeTeam,
+                  awayTeamScore: match.awayTeamScore,
+                  homeTeamScore: match.homeTeamScore,
+                  referee: match.referee,
+                  arena: match.arena,
+                  matchTime: match.matchTime,
+                  awayTeamLogo: match.awayTeamLogo,
+                  homeTeamLogo: match.homeTeamLogo,
+                  awayTeamStats: match.awayTeamStats,
+                  homeTeamStats: match.homeTeamStats,
+                  homeTeamPts: match.homeTeamPts,
+                  awayTeamPts: match.awayTeamPts,
+                  awayTeamColor: match.awayTeamColor,
+                  homeTeamColor: match.homeTeamColor,
+                });
+              }}
+              style={({ pressed }) => {
+                pressed ? styles.buttonPressed : null;
+              }}
+              android_ripple={{ color: Colors.grey_200 }}
+            >
+              <Matches
+                homeTeam={match.homeTeam}
+                awayTeam={match.awayTeam}
+                matchTime={match.matchTime}
+                homeTeamLogo={match.homeTeamLogo}
+                awayTeamLogo={match.awayTeamLogo}
+                homeTeamScore={match.homeTeamScore}
+                awayTeamScore={match.awayTeamScore}
+              />
+            </Pressable>
+          );
+        })
+      )}
     </View>
   );
 }

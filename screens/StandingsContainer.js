@@ -45,13 +45,13 @@ function StandingsContainer() {
           title: "Playoffs",
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="PlayOut"
         component={PlayOut}
         options={{
           title: "PlayOut",
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 }
