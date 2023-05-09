@@ -84,25 +84,23 @@ function AccountScreen() {
       </View>
       <View>
         <Text style={styles.title}>Favorite Teams</Text>
-        <ScrollView>
-          {isLoading1 ? (
-            <View style={styles.loaderContainer}>
-              <ActivityIndicator size={"large"} color={Colors.yellow} />
-            </View>
-          ) : (
-            favoritesTeams &&
-            favoritesTeams.map((team) => {
-              return (
-                <FavoriteTeams
-                  key={team.id}
-                  teamLogo={team.teamLogo}
-                  teamName={team.teamName}
-                  smallTeamName={team.smallTeamName}
-                />
-              );
-            })
-          )}
-        </ScrollView>
+        {isLoading1 ? (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size={"large"} color={Colors.yellow} />
+          </View>
+        ) : (
+          favoritesTeams &&
+          favoritesTeams.map((team) => {
+            return (
+              <FavoriteTeams
+                key={team.id}
+                teamLogo={team.teamLogo}
+                teamName={team.teamName}
+                smallTeamName={team.smallTeamName}
+              />
+            );
+          })
+        )}
       </View>
     </View>
   );

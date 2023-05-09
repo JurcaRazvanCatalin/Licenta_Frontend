@@ -23,21 +23,30 @@ function PlayOffs() {
       `https://standings.herokuapp.com/api/v1/teams/create-standings?phase=Playout&group=turul1`
     ).then((response) => {
       setData_Playoffs(response.data.teams);
+      console.log(response.data.teams);
       setIsLodingTurul1(false);
     });
+  }, []);
+
+  useEffect(() => {
     axios(
       `https://standings.herokuapp.com/api/v1/teams/create-standings?phase=Playout&group=11-14`
     ).then((response) => {
       setData_Playoffs11_14(response.data.teams);
+      console.log(response.data.teams);
       setIsLoading11_14(false);
     });
-    // axios(
-    //   `https://standings.herokuapp.com/api/v1/teams/create-standings?phase=Playout&group=15-18`
-    // ).then((response) => {
-    //   setData_Playoffs15_18(response.data.teams);
-    //   setIsLoading15_18(false);
-    // });
-  });
+  }, []);
+
+  useEffect(() => {
+    axios(
+      `https://standings.herokuapp.com/api/v1/teams/create-standings?phase=Playout&group=15-18`
+    ).then((response) => {
+      setData_Playoffs15_18(response.data.teams);
+      console.log(response.data.teams);
+      setIsLoading15_18(false);
+    });
+  }, []);
 
   return (
     <ScrollView style={styles.container}>
@@ -73,72 +82,72 @@ function PlayOffs() {
             );
           })
         )}
-        {/* <Text style={styles.groupText}>Locurile 15-18</Text>
-        <View style={styles.table}>
-          <View style={styles.teamContainer}>
-            <Text style={styles.headerText}>#</Text>
-            <Text style={[styles.headerText, styles.nameContainer]}>Name</Text>
-            <Text style={styles.headerText}>M</Text>
-            <Text style={styles.headerText}>W</Text>
-            <Text style={styles.headerText}>L</Text>
-            <Text style={styles.headerText}>P</Text>
-          </View>
-          {isLoading15_18 ? (
-            <View style={styles.loaderContainer}>
-              <ActivityIndicator size={"large"} color={Colors.white} />
-            </View>
-          ) : (
-            data_playoffs15_18 &&
-            data_playoffs15_18.map((team) => {
-              return (
-                <TeamStanding
-                  key={team._id}
-                  ranking={team.ranking}
-                  teamLogo={team.teamLogo}
-                  smallTeamName={team.smallTeamName}
-                  teamName={team.teamName}
-                  matchesPlayed={team.matchesPlayed}
-                  winnedMatches={team.winnedMatches}
-                  lostMatches={team.lostMatches}
-                  pts={team.pts}
-                />
-              );
-            })
-          )}
-        </View> */}
-        <Text style={styles.groupText}>Locurile 11-14</Text>
-        <View style={styles.table}>
-          <View style={styles.teamContainer}>
-            <Text style={styles.headerText}>#</Text>
-            <Text style={[styles.headerText, styles.nameContainer]}>Name</Text>
-            <Text style={styles.headerText}>M</Text>
-            <Text style={styles.headerText}>W</Text>
-            <Text style={styles.headerText}>L</Text>
-            <Text style={styles.headerText}>P</Text>
-          </View>
-          {isLoading11_14 ? (
-            <View style={styles.loaderContainer}>
-              <ActivityIndicator size={"large"} color={Colors.white} />
-            </View>
-          ) : (
-            data_playoffs11_14 &&
-            data_playoffs11_14.map((team) => {
-              return (
-                <TeamStanding
-                  key={team._id}
-                  ranking={team.ranking}
-                  teamLogo={team.teamLogo}
-                  smallTeamName={team.smallTeamName}
-                  teamName={team.teamName}
-                  matchesPlayed={team.matchesPlayed}
-                  winnedMatches={team.winnedMatches}
-                  lostMatches={team.lostMatches}
-                  pts={team.pts}
-                />
-              );
-            })
-          )}
+      </View>
+      <Text style={styles.groupText}>Locurile 11-14</Text>
+      <View style={styles.table}>
+        <View style={styles.teamContainer}>
+          <Text style={styles.headerText}>#</Text>
+          <Text style={[styles.headerText, styles.nameContainer]}>Name</Text>
+          <Text style={styles.headerText}>M</Text>
+          <Text style={styles.headerText}>W</Text>
+          <Text style={styles.headerText}>L</Text>
+          <Text style={styles.headerText}>P</Text>
         </View>
+        {isLoading11_14 ? (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size={"large"} color={Colors.white} />
+          </View>
+        ) : (
+          data_playoffs11_14 &&
+          data_playoffs11_14.map((team) => {
+            return (
+              <TeamStanding
+                key={team._id}
+                ranking={team.ranking}
+                teamLogo={team.teamLogo}
+                smallTeamName={team.smallTeamName}
+                teamName={team.teamName}
+                matchesPlayed={team.matchesPlayed}
+                winnedMatches={team.winnedMatches}
+                lostMatches={team.lostMatches}
+                pts={team.pts}
+              />
+            );
+          })
+        )}
+      </View>
+      <Text style={styles.groupText}>Locurile 15-18</Text>
+      <View style={styles.table}>
+        <View style={styles.teamContainer}>
+          <Text style={styles.headerText}>#</Text>
+          <Text style={[styles.headerText, styles.nameContainer]}>Name</Text>
+          <Text style={styles.headerText}>M</Text>
+          <Text style={styles.headerText}>W</Text>
+          <Text style={styles.headerText}>L</Text>
+          <Text style={styles.headerText}>P</Text>
+        </View>
+        {isLoading15_18 ? (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size={"large"} color={Colors.white} />
+          </View>
+        ) : (
+          data_playoffs15_18 &&
+          data_playoffs15_18.map((team) => {
+            return (
+              <TeamStanding
+                key={team._id}
+                ranking={team.ranking}
+                teamLogo={team.teamLogo}
+                smallTeamName={team.smallTeamName}
+                teamName={team.teamName}
+                matchesPlayed={team.matchesPlayed}
+                winnedMatches={team.winnedMatches}
+                lostMatches={team.lostMatches}
+                pts={team.pts}
+              />
+            );
+          })
+        )}
       </View>
     </ScrollView>
   );

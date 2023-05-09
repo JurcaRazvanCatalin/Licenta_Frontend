@@ -21,17 +21,25 @@ function FavoriteTeams({ teamLogo, teamName, smallTeamName }) {
 
   useEffect(() => {
     const fetchMatches = async () => {
-      const response = await axios(
-        `https://matches.herokuapp.com/api/v1/matches/create-match`
+      const homeTeamMatchesResponse = await axios(
+        `https://matches.herokuapp.com/api/v1/matches/create-match?smallHomeTeamName=${smallTeamName}`
       );
-      setMatches(response.data.matches);
+      const awayTeamMatchesResponse = await axios(
+        `https://matches.herokuapp.com/api/v1/matches/create-match?smallAwayTeamName=${smallTeamName}`
+      );
+
+      const homeTeamMatches = homeTeamMatchesResponse.data.matches;
+      const awayTeamMatches = awayTeamMatchesResponse.data.matches;
+      const allMatches = [...homeTeamMatches, ...awayTeamMatches];
+      setMatches(allMatches);
       setIsLoading(false);
     };
     fetchMatches();
-  });
+    console.log(matches.length);
+  }, []);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View>
       <View style={styles.imgContainer}>
         <View style={{ flexDirection: "column" }}>
           <Pressable
@@ -47,14 +55,14 @@ function FavoriteTeams({ teamLogo, teamName, smallTeamName }) {
           </Pressable>
         </View>
       </View>
-      {/* {isLoading ? (
-        <View style={styles.loaderContainer}>
-          <ActivityIndicator size={"large"} color={Colors.white} />
-        </View>
-      ) : (
-        matches &&
-        matches.map((match) => {
-          if (match.homeTeam === teamName || match.awayTeam === teamName) {
+      <ScrollView contentContainerStyle={{ paddingBottom: 550 }}>
+        {isLoading ? (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size={"large"} color={Colors.white} />
+          </View>
+        ) : (
+          matches &&
+          matches.map((match) => {
             return (
               <Pressable
                 key={match._id}
@@ -94,9 +102,9 @@ function FavoriteTeams({ teamLogo, teamName, smallTeamName }) {
                 />
               </Pressable>
             );
-          }
-        })
-      )} */}
+          })
+        )}
+      </ScrollView>
     </View>
   );
 }
