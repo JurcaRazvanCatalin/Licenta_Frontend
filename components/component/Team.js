@@ -17,9 +17,10 @@ import { Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 function Team({ route }) {
-  const { smallTeamName, teamName, isPressed, teamLogo } = route.params;
+  const { smallTeamName, teamName, teamLogo } = route.params;
   const [playerData, setPlayerData] = useState([]);
   const [firebaseData, setFirebaseData] = useState([]);
+  const [isPressed, setIsPressed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [teamData, setTeamData] = useState([]);
   const noAvailablePhoto =
@@ -58,9 +59,14 @@ function Team({ route }) {
     fetchFirebaseData();
   }, [smallTeamName, isPressed]);
 
+  useEffect(() => {
+    setIsPressed(firebaseData && Object.keys(firebaseData).length > 0);
+  }, [firebaseData]);
+
   const handlePress = async () => {
-    const updatedIsPressed = !teamData[0].isPressed;
+    const updatedIsPressed = !isPressed;
     console.log(updatedIsPressed);
+    setIsPressed(updatedIsPressed);
 
     if (updatedIsPressed) {
       if (firebaseData) {
@@ -143,7 +149,7 @@ function Team({ route }) {
                       {team.teamName}
                     </Text>
                     <TouchableOpacity onPress={handlePress}>
-                      {team.isPressed ? (
+                      {isPressed ? (
                         <Ionicons name="star" size={24} color={Colors.yellow} />
                       ) : (
                         <Ionicons

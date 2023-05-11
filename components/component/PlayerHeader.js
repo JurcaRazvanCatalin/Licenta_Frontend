@@ -23,11 +23,11 @@ function PlayerHeader({
   reb_per_game,
   ass_per_game,
   eff,
-  isPressed,
   noAvailablePhoto,
 }) {
   const [playerDatas, setPlayerDatas] = useState([]);
   const [firebaseId, setFirebaseId] = useState([]);
+  const [isPressed, setIsPressed] = useState(false);
 
   const playerData = {
     id: id,
@@ -53,11 +53,16 @@ function PlayerHeader({
       }
     };
     getPlayerData();
+  }, [playerNameSmall]);
+
+  useEffect(() => {
+    setIsPressed(playerDatas && Object.keys(playerDatas).length > 0);
   }, [playerDatas]);
 
   const handlePressed = async () => {
     const updatedIsPressed = !isPressed;
     console.log(updatedIsPressed);
+    setIsPressed(updatedIsPressed);
 
     if (updatedIsPressed) {
       if (playerDatas) {
@@ -103,10 +108,10 @@ function PlayerHeader({
       }
     }
 
-    axios.patch(
-      `https://players.herokuapp.com/api/v1/players/create-player/${playerNameSmall}`,
-      { isPressed: updatedIsPressed }
-    );
+    // axios.patch(
+    //   `https://players.herokuapp.com/api/v1/players/create-player/${playerNameSmall}`,
+    //   { isPressed: updatedIsPressed }
+    // );
   };
 
   return (
