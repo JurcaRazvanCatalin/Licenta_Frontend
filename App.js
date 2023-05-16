@@ -8,13 +8,16 @@ import TeamsContainer from "./screens/TeamsContainer";
 import StatisticsContainer from "./screens/StatisticsContainer.js";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "./components/UI/Colors";
-import { StyleSheet } from "react-native";
 import MatchStats from "./components/component/MatchStats";
 import Player from "./components/component/Player";
 import Team from "./components/component/Team";
 import LoginSignup from "./components/component/LoginSignup";
 import SignUp from "./components/component/SignUp";
 import AccountScreen from "./screens/AccountScreen";
+import AuthContextProvider, {
+  AuthContext,
+} from "./components/context/auth-context";
+import { useContext } from "react";
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -93,13 +96,13 @@ function TabNavigator() {
         }}
       />
       <Tabs.Screen
-        name="Account"
+        name="Favorites"
         component={AccountScreen}
         options={{
           tabBarIcon: ({ size, color, focused }) => {
             return (
               <Ionicons
-                name={focused ? "person" : "person-outline"}
+                name={focused ? "star" : "star-outline"}
                 size={size}
                 color={color}
               />
@@ -111,44 +114,72 @@ function TabNavigator() {
   );
 }
 
+const AuthStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        contentStyle: {
+          backgroundColor: Colors.grey_400,
+        },
+        headerStyle: {
+          backgroundColor: Colors.grey_500,
+        },
+        headerTintColor: Colors.white,
+      }}
+    >
+      <Stack.Screen
+        name="SignIn"
+        component={LoginSignup}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUp}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const AuthenticatedStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        contentStyle: {
+          backgroundColor: Colors.grey_400,
+        },
+        headerStyle: {
+          backgroundColor: Colors.grey_500,
+        },
+        headerTintColor: Colors.white,
+      }}
+    >
+      <Stack.Screen name="TabBottom" component={TabNavigator} />
+      <Stack.Screen name="Match" component={MatchStats} />
+      <Stack.Screen name="Player" component={Player} />
+      <Stack.Screen name="Team" component={Team} />
+    </Stack.Navigator>
+  );
+};
+
+const Navigation = () => {
+  const authCtx = useContext(AuthContext);
+
+  return (
+    <NavigationContainer>
+      {!authCtx.isAuthenticated && <AuthStack />}
+      {authCtx.isAuthenticated && <AuthenticatedStack />}
+    </NavigationContainer>
+  );
+};
+
 export default function App() {
   return (
     <>
       <StatusBar style="light" />
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            contentStyle: {
-              backgroundColor: Colors.grey_400,
-            },
-            headerStyle: {
-              backgroundColor: Colors.grey_500,
-            },
-            headerTintColor: Colors.white,
-          }}
-        >
-          <Stack.Screen
-            name="SignIn"
-            component={LoginSignup}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="TabBottom"
-            component={TabNavigator}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen name="Match" component={MatchStats} />
-          <Stack.Screen name="Player" component={Player} />
-          <Stack.Screen name="Team" component={Team} />
-          <Stack.Screen
-            name="SignUp"
-            component={SignUp}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <AuthContextProvider>
+        <Navigation />
+      </AuthContextProvider>
     </>
   );
 }

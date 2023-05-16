@@ -55,7 +55,6 @@ function FavoriteTeams({ teamLogo, teamName, smallTeamName }) {
           </Pressable>
         </View>
       </View>
-
       {isLoading ? (
         <View style={styles.loaderContainer}>
           <ActivityIndicator size={"large"} color={Colors.white} />
@@ -121,6 +120,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 5,
+    marginBottom: 20,
   },
   playerNameTitle: {
     color: Colors.white,

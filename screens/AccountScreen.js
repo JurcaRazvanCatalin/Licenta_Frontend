@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -11,7 +11,7 @@ import axios from "axios";
 import Colors from "../components/UI/Colors";
 import FavoritePlayers from "../components/component/FavoritePlayers";
 import FavoriteTeams from "../components/component/FavoriteTeams";
-import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../components/context/auth-context";
 
 function AccountScreen() {
   const [favoritesPlayers, setFavoritesPlayers] = useState([]);
@@ -40,6 +40,8 @@ function AccountScreen() {
     });
   }, [favoritesPlayers]);
 
+  const authCtx = useContext(AuthContext);
+
   useEffect(() => {
     axios(
       "https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesTeams.json"
@@ -59,8 +61,6 @@ function AccountScreen() {
       setIsLoading1(false);
     });
   }, [favoritesTeams]);
-
-  const navigation = useNavigation();
 
   return (
     <ScrollView style={styles.container}>
@@ -106,12 +106,7 @@ function AccountScreen() {
           })
         )}
       </View>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("SignIn");
-        }}
-        style={styles.button}
-      >
+      <TouchableOpacity style={styles.button} onPress={authCtx.logout}>
         <Text style={{ color: Colors.white, textAlign: "center" }}>
           Sign Out
         </Text>

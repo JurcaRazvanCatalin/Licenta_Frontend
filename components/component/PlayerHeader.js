@@ -1,10 +1,11 @@
 import { StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
 import Colors from "../UI/Colors";
 import ImageSvg from "react-native-remote-svg";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthContext } from "../context/auth-context";
 
 function PlayerHeader({
   id,
@@ -38,11 +39,14 @@ function PlayerHeader({
     teamLogo: teamLogo,
   };
 
+  const authCtx = useContext(AuthContext);
+  console.log(authCtx);
+
   useEffect(() => {
     const getPlayerData = async () => {
       try {
         const response = await axios.get(
-          `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers.json?orderBy="playerNameSmall"&equalTo="${playerNameSmall}"&limitToFirst=1`
+          `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers.json?orderBy="playerNameSmall"&equalTo="${playerNameSmall}"&limitToFirst=1&auth=${authCtx.token}`
         );
         const playerData = response.data
           ? Object.values(response.data)[0]
