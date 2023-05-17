@@ -40,18 +40,19 @@ function PlayerHeader({
   };
 
   const authCtx = useContext(AuthContext);
-  console.log(authCtx);
+  // console.log(authCtx.token);
 
   useEffect(() => {
     const getPlayerData = async () => {
       try {
         const response = await axios.get(
-          `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers.json?orderBy="playerNameSmall"&equalTo="${playerNameSmall}"&limitToFirst=1&auth=${authCtx.token}`
+          `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers/${authCtx.token}.json`
         );
-        const playerData = response.data
-          ? Object.values(response.data)[0]
-          : null;
-        setPlayerDatas(playerData);
+        const playerData = response.data ? Object.values(response.data) : null;
+        const filteredPlayer = playerData.find(
+          (player) => player.playerNameSmall === playerNameSmall
+        );
+        setPlayerDatas(filteredPlayer);
       } catch (err) {
         console.error(err);
       }
@@ -65,7 +66,7 @@ function PlayerHeader({
 
   const handlePressed = async () => {
     const updatedIsPressed = !isPressed;
-    console.log(updatedIsPressed);
+    // console.log(updatedIsPressed);
     setIsPressed(updatedIsPressed);
 
     if (updatedIsPressed) {
@@ -75,7 +76,7 @@ function PlayerHeader({
       }
       try {
         const response = await axios.post(
-          "https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers.json",
+          `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers/${authCtx.token}.json`,
           playerData
         );
         const newFirebaseId = response.data.name;
@@ -93,14 +94,20 @@ function PlayerHeader({
     } else {
       try {
         const response = await axios.get(
-          `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers.json?orderBy="playerNameSmall"&equalTo="${playerNameSmall}"&limitToFirst=1`
+          `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers/${authCtx.token}.json`
         );
 
-        const playerToDelete = Object.keys(response.data)[0];
+        const playerValues = Object.entries(response.data);
 
-        if (playerToDelete) {
+        const filteredPlayer = playerValues.find(
+          ([firebaseId, player]) => player.playerNameSmall === playerNameSmall
+        );
+
+        if (filteredPlayer) {
+          const [firebaseId] = filteredPlayer;
+          console.log(firebaseId);
           await axios.delete(
-            `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers/${playerToDelete}.json`
+            `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers/${authCtx.token}/${firebaseId}.json`
           );
         } else {
           console.log(`Player not found in Firebase`);

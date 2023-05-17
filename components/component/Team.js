@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ import TeamYearlyStats from "./TeamYearlyStats";
 import { useNavigation } from "@react-navigation/native";
 import { Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { AuthContext } from "../context/auth-context";
 
 function Team({ route }) {
   const { smallTeamName, teamName, teamLogo } = route.params;
@@ -23,6 +24,7 @@ function Team({ route }) {
   const [isPressed, setIsPressed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [teamData, setTeamData] = useState([]);
+  const authCtx = useContext(AuthContext);
   const noAvailablePhoto =
     "https://upload.wikimedia.org/wikipedia/commons/f/fc/No_picture_available.png?fbclid=IwAR1VIrlTu94YPaj0nxwQQAau3ejIxVAb6A91lpgsZ3_vJQVFLO8xgFlowuc";
   const navigation = useNavigation();
@@ -51,13 +53,19 @@ function Team({ route }) {
   useEffect(() => {
     const fetchFirebaseData = async () => {
       const response = await axios(
-        `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesTeams.json?orderBy="smallTeamName"&equalTo="${smallTeamName}"&limitToFirst=1`
+        `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesTeams/${authCtx.token}.json`
       );
-      const teamData = response.data ? Object.values(response.data)[0] : null;
-      setFirebaseData(teamData);
+
+      const teamData = response.data ? Object.values(response.data) : null;
+      const filteredTeam = teamData.find(
+        (team) => team.smallTeamName === smallTeamName
+      );
+      setFirebaseData(filteredTeam);
     };
     fetchFirebaseData();
   }, [smallTeamName, isPressed]);
+
+  // console.log(firebaseData);
 
   useEffect(() => {
     setIsPressed(firebaseData && Object.keys(firebaseData).length > 0);
@@ -65,7 +73,6 @@ function Team({ route }) {
 
   const handlePress = async () => {
     const updatedIsPressed = !isPressed;
-    console.log(updatedIsPressed);
     setIsPressed(updatedIsPressed);
 
     if (updatedIsPressed) {
@@ -75,7 +82,7 @@ function Team({ route }) {
       }
       await axios
         .post(
-          "https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesTeams.json",
+          `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesTeams/${authCtx.token}.json?auth=${authCtx.token}`,
           teamDatas
         )
         .then((response) => {
@@ -85,25 +92,30 @@ function Team({ route }) {
         });
     } else {
       const response = await axios(
-        `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesTeams.json?orderBy="smallTeamName"&equalTo="${smallTeamName}"&limitToFirst=1`
+        `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesTeams/${authCtx.token}.json`
       );
 
-      const teamToDelete = Object.keys(response.data)[0];
-      console.log(teamToDelete);
+      const teamValues = Object.entries(response.data);
+
+      const teamToDelete = teamValues.find(
+        ([firebaseId, team]) => team.smallTeamName === smallTeamName
+      );
 
       if (teamToDelete) {
+        const [firebaseId] = teamToDelete;
+        console.log(firebaseId);
         await axios.delete(
-          `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesTeams/${teamToDelete}.json`
+          `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesTeams/${authCtx.token}/${firebaseId}.json`
         );
       } else {
         console.log(`Team Not found in database`);
       }
       setFirebaseData(null);
     }
-    await axios.patch(
-      `https://teams.herokuapp.com/api/v1/teams/create-team/${smallTeamName}`,
-      { isPressed: updatedIsPressed }
-    );
+    // await axios.patch(
+    //   `https://teams.herokuapp.com/api/v1/teams/create-team/${smallTeamName}`,
+    //   { isPressed: updatedIsPressed }
+    // );
   };
 
   useLayoutEffect(() => {

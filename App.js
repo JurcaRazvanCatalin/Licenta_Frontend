@@ -17,7 +17,9 @@ import AccountScreen from "./screens/AccountScreen";
 import AuthContextProvider, {
   AuthContext,
 } from "./components/context/auth-context";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SplashScreen from "expo-splash-screen";
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -154,7 +156,11 @@ const AuthenticatedStack = () => {
         headerTintColor: Colors.white,
       }}
     >
-      <Stack.Screen name="TabBottom" component={TabNavigator} />
+      <Stack.Screen
+        name="TabBottom"
+        component={TabNavigator}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name="Match" component={MatchStats} />
       <Stack.Screen name="Player" component={Player} />
       <Stack.Screen name="Team" component={Team} />
@@ -173,12 +179,41 @@ const Navigation = () => {
   );
 };
 
+function Root() {
+  const [isTryingLogIn, setIsTryingLogin] = useState(true);
+  const authCtx = useContext(AuthContext);
+
+  async function hideAsync() {
+    await SplashScreen.hideAsync();
+  }
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      const storedToken = await AsyncStorage.getItem("userId");
+      if (storedToken) {
+        authCtx.authenticate(storedToken);
+        hideAsync();
+      }
+
+      setIsTryingLogin(false);
+    };
+
+    fetchToken();
+  }, []);
+
+  if (isTryingLogIn) {
+    return;
+  }
+
+  return <Navigation />;
+}
+
 export default function App() {
   return (
     <>
       <StatusBar style="light" />
       <AuthContextProvider>
-        <Navigation />
+        <Root />
       </AuthContextProvider>
     </>
   );

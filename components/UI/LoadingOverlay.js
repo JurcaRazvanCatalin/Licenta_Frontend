@@ -1,4 +1,5 @@
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import Colors from "./Colors";
 
 function LoadingOverlay({ message }) {
   return (
@@ -21,5 +22,7 @@ const styles = StyleSheet.create({
   message: {
     fontSize: 16,
     marginBottom: 12,
+    fontWeight: 700,
+    color: Colors.white,
   },
 });

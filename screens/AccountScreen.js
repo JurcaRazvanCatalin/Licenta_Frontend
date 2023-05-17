@@ -21,7 +21,7 @@ function AccountScreen() {
 
   useEffect(() => {
     axios(
-      "https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers.json"
+      `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers/${authCtx.token}.json`
     ).then((response) => {
       const players = [];
       for (const key in response.data) {
@@ -44,7 +44,7 @@ function AccountScreen() {
 
   useEffect(() => {
     axios(
-      "https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesTeams.json"
+      `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesTeams/${authCtx.token}.json`
     ).then((response) => {
       const teams = [];
       for (const key in response.data) {
