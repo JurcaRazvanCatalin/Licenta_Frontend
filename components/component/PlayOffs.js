@@ -14,9 +14,11 @@ function PlayOffs() {
   const [data_playoffsSferturi, setData_PlayoffsSferturi] = useState([]);
   const [data_playoffsSemi, setData_PlayoffsSemi] = useState([]);
   const [data_playoffs5_8, setData_Playoffs5_8] = useState([]);
+  const [data_playoffsFinala, setData_PlayoffsFinala] = useState([]);
   const [isLoadingSferturi, setIsLoadingSferturi] = useState(true);
   const [isLoadingSemifinale, setIsLoadingSemifinale] = useState(true);
   const [isLoading5_8, setIsLoading5_8] = useState(true);
+  const [isLoadingFinala, setIsLoadingFinala] = useState(true);
 
   useEffect(() => {
     axios(
@@ -36,6 +38,12 @@ function PlayOffs() {
     ).then((response) => {
       setData_Playoffs5_8(response.data.teams);
       setIsLoading5_8(false);
+    });
+    axios(
+      `https://standings.herokuapp.com/api/v1/teams/create-standings?phase=Playoffs&group=finala`
+    ).then((response) => {
+      setData_PlayoffsFinala(response.data.teams);
+      setIsLoadingFinala(false);
     });
   }, []);
 
@@ -91,6 +99,39 @@ function PlayOffs() {
         ) : (
           data_playoffsSemi &&
           data_playoffsSemi.map((team) => {
+            return (
+              <TeamStanding
+                key={team._id}
+                ranking={team.ranking}
+                teamLogo={team.teamLogo}
+                smallTeamName={team.smallTeamName}
+                teamName={team.teamName}
+                matchesPlayed={team.matchesPlayed}
+                winnedMatches={team.winnedMatches}
+                lostMatches={team.lostMatches}
+                pts={team.pts}
+              />
+            );
+          })
+        )}
+      </View>
+      <Text style={styles.groupText}>Finala</Text>
+      <View style={styles.table}>
+        <View style={styles.teamContainer}>
+          <Text style={styles.headerText}>#</Text>
+          <Text style={[styles.headerText, styles.nameContainer]}>Name</Text>
+          <Text style={styles.headerText}>M</Text>
+          <Text style={styles.headerText}>W</Text>
+          <Text style={styles.headerText}>L</Text>
+          <Text style={styles.headerText}>P</Text>
+        </View>
+        {isLoadingFinala ? (
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator size={"large"} color={Colors.white} />
+          </View>
+        ) : (
+          data_playoffsFinala &&
+          data_playoffsFinala.map((team) => {
             return (
               <TeamStanding
                 key={team._id}

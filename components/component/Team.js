@@ -57,9 +57,9 @@ function Team({ route }) {
       );
 
       const teamData = response.data ? Object.values(response.data) : null;
-      const filteredTeam = teamData.find(
-        (team) => team.smallTeamName === smallTeamName
-      );
+      const filteredTeam =
+        teamData &&
+        teamData.find((team) => team.smallTeamName === smallTeamName);
       setFirebaseData(filteredTeam);
     };
     fetchFirebaseData();
@@ -97,9 +97,11 @@ function Team({ route }) {
 
       const teamValues = Object.entries(response.data);
 
-      const teamToDelete = teamValues.find(
-        ([firebaseId, team]) => team.smallTeamName === smallTeamName
-      );
+      const teamToDelete =
+        teamValues &&
+        teamValues.find(
+          ([firebaseId, team]) => team.smallTeamName === smallTeamName
+        );
 
       if (teamToDelete) {
         const [firebaseId] = teamToDelete;

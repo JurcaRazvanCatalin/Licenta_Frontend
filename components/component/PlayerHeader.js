@@ -49,9 +49,11 @@ function PlayerHeader({
           `https://licenta-cbmr-default-rtdb.firebaseio.com/favoritesPlayers/${authCtx.token}.json`
         );
         const playerData = response.data ? Object.values(response.data) : null;
-        const filteredPlayer = playerData.find(
-          (player) => player.playerNameSmall === playerNameSmall
-        );
+        const filteredPlayer =
+          playerData &&
+          playerData.find(
+            (player) => player.playerNameSmall === playerNameSmall
+          );
         setPlayerDatas(filteredPlayer);
       } catch (err) {
         console.error(err);
@@ -99,9 +101,11 @@ function PlayerHeader({
 
         const playerValues = Object.entries(response.data);
 
-        const filteredPlayer = playerValues.find(
-          ([firebaseId, player]) => player.playerNameSmall === playerNameSmall
-        );
+        const filteredPlayer =
+          playerValues &&
+          playerValues.find(
+            ([firebaseId, player]) => player.playerNameSmall === playerNameSmall
+          );
 
         if (filteredPlayer) {
           const [firebaseId] = filteredPlayer;
