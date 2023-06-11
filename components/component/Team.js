@@ -37,12 +37,12 @@ function Team({ route }) {
 
   useEffect(() => {
     axios(
-      `https://players.herokuapp.com/api/v1/players/create-player?smallTeamName=${smallTeamName}`
+      `https://player.herokuapp.com/api/v2/players/create-player?smallTeamName=${smallTeamName}`
     ).then((response) => {
       setPlayerData(response.data.players);
     });
     axios(
-      `https://teams.herokuapp.com/api/v1/teams/create-team?smallTeamName=${smallTeamName}`
+      `https://teamss.herokuapp.com/api/v2/teams/create-team?smallTeamName=${smallTeamName}`
     ).then((response) => {
       setTeamData(response.data.teams);
       setIsLoading(false);

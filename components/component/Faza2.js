@@ -8,7 +8,8 @@ import {
   ActivityIndicator,
 } from "react-native";
 import Colors from "../UI/Colors";
-const API_URI = "https://standings.herokuapp.com/api/v1/teams/create-standings";
+const API_URI =
+  "https://standingss.herokuapp.com/api/v2/teams/create-standings";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import TeamStanding from "./TeamStanding";

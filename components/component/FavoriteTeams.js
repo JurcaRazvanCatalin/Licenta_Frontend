@@ -22,10 +22,10 @@ function FavoriteTeams({ teamLogo, teamName, smallTeamName }) {
   useEffect(() => {
     const fetchMatches = async () => {
       const homeTeamMatchesResponse = await axios(
-        `https://matches.herokuapp.com/api/v1/matches/create-match?smallHomeTeamName=${smallTeamName}`
+        `https://matchess.herokuapp.com/api/v2/matches/create-match?smallHomeTeamName=${smallTeamName}`
       );
       const awayTeamMatchesResponse = await axios(
-        `https://matches.herokuapp.com/api/v1/matches/create-match?smallAwayTeamName=${smallTeamName}`
+        `https://matchess.herokuapp.com/api/v2/matches/create-match?smallAwayTeamName=${smallTeamName}`
       );
 
       const homeTeamMatches = homeTeamMatchesResponse.data.matches;

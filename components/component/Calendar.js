@@ -21,7 +21,7 @@ let datesWhitelist = [
   },
 ];
 
-const API_URI = "https://matches.herokuapp.com/api/v1/matches/create-match";
+const API_URI = "https://matchess.herokuapp.com/api/v2/matches/create-match";
 
 function Calendar() {
   const [selectedDate, setSelectedDate] = useState(new Date());

@@ -22,25 +22,25 @@ function PlayOffs() {
 
   useEffect(() => {
     axios(
-      `https://standings.herokuapp.com/api/v1/teams/create-standings?phase=Playoffs&group=sferturi`
+      `https://standingss.herokuapp.com/api/v2/teams/create-standings?phase=Playoffs&group=sferturi`
     ).then((response) => {
       setData_PlayoffsSferturi(response.data.teams);
       setIsLoadingSferturi(false);
     });
     axios(
-      `https://standings.herokuapp.com/api/v1/teams/create-standings?phase=Playoffs&group=semifinale`
+      `https://standingss.herokuapp.com/api/v2/teams/create-standings?phase=Playoffs&group=semifinale`
     ).then((response) => {
       setData_PlayoffsSemi(response.data.teams);
       setIsLoadingSemifinale(false);
     });
     axios(
-      `https://standings.herokuapp.com/api/v1/teams/create-standings?phase=Playoffs&group=5-8`
+      `https://standingss.herokuapp.com/api/v2/teams/create-standings?phase=Playoffs&group=5-8`
     ).then((response) => {
       setData_Playoffs5_8(response.data.teams);
       setIsLoading5_8(false);
     });
     axios(
-      `https://standings.herokuapp.com/api/v1/teams/create-standings?phase=Playoffs&group=finala`
+      `https://standingss.herokuapp.com/api/v2/teams/create-standings?phase=Playoffs&group=finala`
     ).then((response) => {
       setData_PlayoffsFinala(response.data.teams);
       setIsLoadingFinala(false);

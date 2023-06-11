@@ -20,7 +20,7 @@ function PlayOffs() {
 
   useEffect(() => {
     axios(
-      `https://standings.herokuapp.com/api/v1/teams/create-standings?phase=Playout&group=turul1`
+      `https://standingss.herokuapp.com/api/v2/teams/create-standings?phase=Playout&group=turul1`
     ).then((response) => {
       setData_Playoffs(response.data.teams);
       console.log(response.data.teams);
@@ -30,7 +30,7 @@ function PlayOffs() {
 
   useEffect(() => {
     axios(
-      `https://standings.herokuapp.com/api/v1/teams/create-standings?phase=Playout&group=11-14`
+      `https://standingss.herokuapp.com/api/v2/teams/create-standings?phase=Playout&group=11-14`
     ).then((response) => {
       setData_Playoffs11_14(response.data.teams);
       console.log(response.data.teams);
@@ -40,7 +40,7 @@ function PlayOffs() {
 
   useEffect(() => {
     axios(
-      `https://standings.herokuapp.com/api/v1/teams/create-standings?phase=Playout&group=15-18`
+      `https://standingss.herokuapp.com/api/v2/teams/create-standings?phase=Playout&group=15-18`
     ).then((response) => {
       setData_Playoffs15_18(response.data.teams);
       console.log(response.data.teams);

@@ -19,7 +19,7 @@ function Player({ route }) {
 
   useEffect(() => {
     axios(
-      `https://players.herokuapp.com/api/v1/players/create-player?playerNameSmall=${playerNameSmall}`
+      `https://player.herokuapp.com/api/v2/players/create-player?playerNameSmall=${playerNameSmall}`
     ).then((response) => {
       setPlayer(response.data.players);
       // console.log(response.data.players);

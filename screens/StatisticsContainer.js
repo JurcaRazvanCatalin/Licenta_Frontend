@@ -34,7 +34,7 @@ function StatisticsContainer() {
   useEffect(() => {
     if (selectedValue1 && !selectedValue2) {
       axios(
-        `https://statistics2023.herokuapp.com/api/v1/statistics/create-stat?phase=${selectedValue1}&stats=puncte`
+        `https://statisticss.herokuapp.com/api/v2/statistics/create-stat?phase=${selectedValue1}&stats=puncte`
       ).then((response) => {
         setData(response.data.statistics);
         setUpdatedTitle(response.data.statistics[0].phase);
@@ -43,7 +43,7 @@ function StatisticsContainer() {
       });
     } else if (selectedValue1 && selectedValue2) {
       axios(
-        `https://statistics2023.herokuapp.com/api/v1/statistics/create-stat?phase=${selectedValue1}&stats=${selectedValue2}`
+        `https://statisticss.herokuapp.com/api/v2/statistics/create-stat?phase=${selectedValue1}&stats=${selectedValue2}`
       ).then((response) => {
         setData(response.data.statistics);
         setUpdatedTitle(response.data.statistics[0].phase);

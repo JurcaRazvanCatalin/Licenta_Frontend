@@ -1,27 +1,26 @@
 {
   "expo": {
-    "name": "Statistici_Baschet_Masculin",
-    "slug": "Statistici_Baschet_Masculin",
+    "name": "CBMR App",
+    "slug": "statisticibaschetmasculin",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/iconApp.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/splashScreen.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/iconApp.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.statisticibaschetmasculin.myapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
